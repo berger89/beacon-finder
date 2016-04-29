@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">BeaconFinder</string>
+    <string name="title_activity_ranging">RangingActivity</string>
+</resources>
