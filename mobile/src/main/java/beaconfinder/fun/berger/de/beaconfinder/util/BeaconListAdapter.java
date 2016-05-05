@@ -1,8 +1,6 @@
-package beaconfinder.fun.berger.de.beaconfinder;
+package beaconfinder.fun.berger.de.beaconfinder.util;
 
-import android.content.ClipData;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +11,10 @@ import android.widget.TextView;
 import org.altbeacon.beacon.Beacon;
 
 import java.text.DecimalFormat;
-import java.util.Date;
 import java.util.List;
+
+import beaconfinder.fun.berger.de.beaconfinder.fragment.MonitorFragment;
+import beaconfinder.fun.berger.de.beaconfinder.R;
 
 /**
  * Created by Berger on 28.04.2016.
@@ -22,12 +22,12 @@ import java.util.List;
 public class BeaconListAdapter extends ArrayAdapter<Beacon> {
 
     private int layoutResource;
-    private MonitoringActivity monitoringActivity;
+    private MonitorFragment monitoringFrag;
 
     public BeaconListAdapter(Context context, int layoutResource, List<Beacon> threeStringsList) {
         super(context, layoutResource, threeStringsList);
         this.layoutResource = layoutResource;
-        monitoringActivity = (MonitoringActivity) context;
+//        monitoringFrag = (MainActivity) context;
     }
 
     @Override
@@ -75,16 +75,16 @@ public class BeaconListAdapter extends ArrayAdapter<Beacon> {
                     viewHolder.distanceTV.setText("near");
                 else if (beacon.getDistance() > 3.0)
                     viewHolder.distanceTV.setText("far");
-                if (monitoringActivity.getUnfindBeaconList().contains(beacon)) {
-                    viewHolder.bluetoothIV.setImageResource(R.drawable.wifi_icon_grey);
-                    if (beacon.getExtraDataFields() != null && beacon.getExtraDataFields().size() > 0) {
-                        Date d1 = new Date();
-                        Date d2 = new Date();
-                        d2.setTime(beacon.getExtraDataFields().get(0));
-                        long seconds = (d1.getTime() - d2.getTime()) / 1000;
-                        viewHolder.distanceTV.setText(seconds + "seconds");
-                    }
-                }
+//                if (monitoringFrag.getUnfindBeaconList().contains(beacon)) {
+//                    viewHolder.bluetoothIV.setImageResource(R.drawable.wifi_icon_grey);
+//                    if (beacon.getExtraDataFields() != null && beacon.getExtraDataFields().size() > 0) {
+//                        Date d1 = new Date();
+//                        Date d2 = new Date();
+//                        d2.setTime(beacon.getExtraDataFields().get(0));
+//                        long seconds = (d1.getTime() - d2.getTime()) / 1000;
+//                        viewHolder.distanceTV.setText(seconds + "seconds");
+//                    }
+//                }
             }
 
 

@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.2"
     defaultConfig {
         applicationId "beaconfinder.fun.berger.de.beaconfinder"
-        minSdkVersion 22
+        minSdkVersion 18
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -29,4 +29,7 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.0.1'
     compile 'com.android.support:design:23.3.0'
     compile 'org.altbeacon:android-beacon-library:2.8.1'
+    compile('com.github.afollestad:assent:0.2.2') {
+        transitive = true
+    }
 }
