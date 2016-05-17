@@ -24,4 +24,8 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.google.android.support:wearable:1.4.0'
     compile 'com.google.android.gms:play-services-wearable:8.4.0'
+    compile 'org.altbeacon:android-beacon-library:2.8.1'
+    compile('com.github.afollestad:assent:0.2.2') {
+        transitive = true
+    }
 }
