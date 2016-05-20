@@ -56,10 +56,15 @@ public class MonitorFragment extends Fragment implements BeaconConsumer {
 
     private OnFragmentInteractionListener mListener;
 
+    private BeaconListAdapter adapter;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Bluetooth check
         verifyBluetooth();
+
         beaconManager = BeaconManager.getInstanceForApplication(getActivity());
         //BEACON PARSER
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:0-3=4c000215,i:4-19,i:20-21,i:22-23,p:24-24"));
@@ -68,6 +73,8 @@ public class MonitorFragment extends Fragment implements BeaconConsumer {
         if (!Assent.isPermissionGranted(Assent.ACCESS_COARSE_LOCATION)) {
             requestLocationPermission();
         }
+
+
     }
 
 
@@ -79,6 +86,8 @@ public class MonitorFragment extends Fragment implements BeaconConsumer {
         //UI
         listView = (ListView) view.findViewById(R.id.listview_beacons);
 
+        adapter = new BeaconListAdapter(listView.getContext(), R.layout.list_item_beacon, new ArrayList(beaconHashMap.values()));
+        listView.setAdapter(adapter);
 
         //Check for bluetooth and Scan for Beacon
 //        verifyBluetooth();
@@ -87,46 +96,6 @@ public class MonitorFragment extends Fragment implements BeaconConsumer {
         beaconManager.bind(this);
 
         return view;
-
-
-//        // Inflate the layout for this fragment
-//        View view = inflater.inflate(R.layout.fragment_monitor, container, false);
-//        super.onCreate(savedInstanceState);
-//        Log.d(TAG, "onCreateView");
-////        editText = (TextView) view.findViewById(R.id.log_text);
-//        listView = (ListView) view.findViewById(R.id.listview_beacons);
-//        beaconHashMap = new HashMap<String, Beacon>();
-//        beaconManager = BeaconManager.getInstanceForApplication(getActivity());
-//        onBeaconServiceConnect();
-//        verifyBluetooth();
-//        beaconManager.getBeaconParsers().clear();
-//        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:0-3=4c000215,i:4-19,i:20-21,i:22-23,p:24-24"));
-//        beaconManager.setForegroundScanPeriod(1300L);
-//        beaconManager.setForegroundBetweenScanPeriod(0L);
-//        beaconManager.bind((MainActivity) getActivity());
-//        logToDisplay("Application just launched");
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            // Android M Permission check
-//            if (getActivity().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//                final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//                builder.setTitle("This app needs location access");
-//                builder.setMessage("Please grant location access so this app can detect beacons in the background.");
-//                builder.setPositiveButton(android.R.string.ok, null);
-//                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-//
-//                    @TargetApi(23)
-//                    @Override
-//                    public void onDismiss(DialogInterface dialog) {
-//                        requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-//                                PERMISSION_REQUEST_COARSE_LOCATION);
-//                    }
-//
-//                });
-//                builder.show();
-//            }
-//        }
-//        return view;
     }
 
     @Override
@@ -186,7 +155,7 @@ public class MonitorFragment extends Fragment implements BeaconConsumer {
                 @Override
                 public void onDismiss(DialogInterface dialog) {
 //                    finish();
-                    System.exit(0);
+//                    System.exit(0);
                 }
 
             });
@@ -232,8 +201,10 @@ public class MonitorFragment extends Fragment implements BeaconConsumer {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            BeaconListAdapter adapter = new BeaconListAdapter(listView.getContext(), R.layout.list_item_beacon, new ArrayList(beaconHashMap.values()));
-                            listView.setAdapter(adapter);
+//                            BeaconListAdapter adapter = new BeaconListAdapter(listView.getContext(), R.layout.list_item_beacon, new ArrayList(beaconHashMap.values()));
+//                            listView.setAdapter(adapter);
+                            adapter.clear();
+                            adapter.addAll(new ArrayList(beaconHashMap.values()));
                         }
                     });
 
@@ -279,7 +250,7 @@ public class MonitorFragment extends Fragment implements BeaconConsumer {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p/>
+     * <p>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.

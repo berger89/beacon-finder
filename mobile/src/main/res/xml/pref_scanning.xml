@@ -1,0 +1,73 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--<PreferenceCategory android:title="@string/pref_header_scanning">-->
+        <!--<EditTextPreference-->
+            <!--android:defaultValue="5000"-->
+            <!--android:inputType="number"-->
+            <!--android:key="key_tracking_age"-->
+            <!--android:summary="@string/pref_scan_tracking_age_summary"-->
+            <!--android:title="@string/pref_scan_tracking_age_title"/>-->
+
+        <!--<EditTextPreference-->
+            <!--android:defaultValue="1100"-->
+            <!--android:inputType="number"-->
+            <!--android:key="key_scan_period"-->
+            <!--android:numeric="integer"-->
+            <!--android:summary="@string/pref_scan_period_summary"-->
+            <!--android:title="@string/pref_scan_period_title"/>-->
+
+        <!--<EditTextPreference-->
+            <!--android:defaultValue="0"-->
+            <!--android:inputType="number"-->
+            <!--android:key="key_between_scan_period"-->
+            <!--android:numeric="integer"-->
+            <!--android:summary="@string/pref_between_scan_period_summary"-->
+            <!--android:title="@string/pref_between_scan_period_title"/>-->
+
+        <!--&lt;!&ndash;<CheckBoxPreference&ndash;&gt;-->
+            <!--&lt;!&ndash;android:key="key_logging"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:defaultValue="false"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:title="Log"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:summary="@string/pref_log_summary"/>&ndash;&gt;-->
+    <!--</PreferenceCategory>-->
+
+    <PreferenceCategory android:title="@string/pref_header_transmit">
+        <ListPreference
+            android:key="key_beacon_uuid"
+            android:defaultValue="00000000-0000-0000-0000-000000000000"
+            android:entries="@array/uuid"
+            android:entryValues="@array/uuid"
+            android:summary="@string/pref_transmit_beacon_uuid_summary"
+            android:title="@string/pref_transmit_beacon_uuid"/>
+
+        <EditTextPreference
+            android:inputType="number"
+            android:key="key_major"
+            android:defaultValue="0"
+            android:maxLength="5"
+            android:title="@string/pref_transmit_major"/>
+
+        <EditTextPreference
+            android:defaultValue="0"
+            android:inputType="number"
+            android:key="key_minor"
+            android:maxLength="5"
+            android:title="@string/pref_transmit_minor"/>
+
+        <EditTextPreference
+            android:inputType="number|numberSigned"
+            android:defaultValue="-69"
+            android:maxLength="4"
+            android:key="key_power"
+            android:summary="@string/pref_transmit_power_summary"
+            android:title="@string/pref_transmit_power"/>
+
+        <ListPreference
+            android:key="key_beacon_advertisement"
+            android:defaultValue="2"
+            android:entries="@array/advertisement"
+            android:entryValues="@array/advertisement"
+            android:summary="@string/pref_transmit_beacon_advertisement_summary"
+            android:title="@string/pref_transmit_beacon_advertisement"/>
+    </PreferenceCategory>
+</PreferenceScreen>

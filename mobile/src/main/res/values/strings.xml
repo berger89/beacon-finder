@@ -1,13 +1,50 @@
 <resources>
     <string name="app_name">Beacon Finder</string>
-    <string name="title_activity_ranging">RangingActivity</string>
     <string name="email_ostfalia">a.berger@ostfalia.de</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
 
+
+    <!-- Scanning settings -->
+    <string name="pref_scan_tracking_age_summary">The amount of time a detected beacon stays in memory.</string>
+    <string name="pref_scan_tracking_age_title">Tracking age(ms)</string>
+    <string name="pref_scan_period_summary">How many times per second a new scan is started</string>
+    <string name="pref_scan_period_title">Scan period(ms)</string>
+    <string name="pref_between_scan_period_summary">The amount of time between a scan period</string>
+    <string name="pref_between_scan_period_title">Between scan period(ms)</string>
+    <string name="pref_header_transmit">Transmitting</string>
+    <string name="transmitting_not_supported">Transmitting not supported</string>
+    <string name="transmitting_not_supported_message">Transmitting as a beacon is not supported on your
+        device.
+    </string>
+    <string name="pref_transmit_beacon_uuid">UUID(id1)</string>
+    <string name="pref_transmit_major">Major(id2)</string>
+    <string name="pref_transmit_minor">Minor(id3)</string>
+    <string name="pref_transmit_beacon_name_summary">Bluetooth name of beacon</string>
+    <string name="pref_transmit_power">TX-Power</string>
+    <string name="pref_transmit_beacon_uuid_summary">Select a pre-defined UUID of beacon</string>
+    <string name="pref_transmit_power_summary">Signal strength of beacon</string>
+    <string name="pref_transmit_beacon_advertisement_summary">Signal frequency in Hz</string>
+    <string name="pref_transmit_beacon_advertisement">Signal frequency(Higher is faster)</string>
+
+    <string name="settings">Settings</string>
+
+    <!-- Content descriptions -->
+    <string name="circle_button_content_desc">Circle button</string>
+    <string name="ring_pulse_desc">Pulse</string>
+    <string name="stop_button_content_desc">Stop button</string>
+    <string name="scan_switch_label">Scanning</string>
+    <string name="transmit_switch_label">Transmit</string>
+    <string name="stop_circle_desc">Stop circle</string>
+
+    <!-- Bluetooth -->
+    <string name="bluetooth_not_enabled">Bluetooth not enabled</string>
+    <string name="please_enable_bluetooth">Please enable bluetooth in settings and restart the app
+        to work properly.
+    </string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -4,8 +4,13 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_monitor"
-            android:icon="@drawable/wifi_icon"
+            android:icon="@drawable/bluetooth_grey"
             android:title="Beacon Scanner"/>
+
+        <item
+            android:id="@+id/nav_transmitter"
+            android:icon="@drawable/wifi_icon"
+            android:title="Beacon Transmitter"/>
     </group>
 
 </menu>

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import org.altbeacon.beacon.BeaconConsumer;
 
 import beaconfinder.fun.berger.de.beaconfinder.R;
 import beaconfinder.fun.berger.de.beaconfinder.fragment.MonitorFragment;
+import beaconfinder.fun.berger.de.beaconfinder.fragment.TransmitterFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, BeaconConsumer {
@@ -141,6 +143,8 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent settingsIntent = new Intent(this, SettingsActivity.class);
+            startActivity(settingsIntent);
             return true;
         }
 
@@ -166,6 +170,9 @@ public class MainActivity extends AppCompatActivity
         switch (viewId) {
             case R.id.nav_monitor:
                 fragment = new MonitorFragment();
+                break;
+            case R.id.nav_transmitter:
+                fragment = new TransmitterFragment();
                 break;
 
         }
