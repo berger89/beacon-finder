@@ -11,6 +11,16 @@
             android:id="@+id/nav_transmitter"
             android:icon="@drawable/wifi_icon"
             android:title="Beacon Transmitter"/>
+
+        <item
+            android:id="@+id/nav_database"
+            android:icon="@drawable/db_icon"
+            android:title="Database"/>
+
+        <item
+            android:id="@+id/nav_trilateration"
+            android:icon="@drawable/location_icon"
+            android:title="Trilateration"/>
     </group>
 
 </menu>

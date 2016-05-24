@@ -28,8 +28,8 @@
         android:layout_gravity="center"
         android:background="@null"
         android:contentDescription="@string/circle_button_content_desc"
-        android:scaleType="centerCrop"
-        android:src="@drawable/bluetooth"/>
+        android:src="@drawable/wifi_icon"
+        android:scaleType="centerInside"/>
 
     <ImageButton
         android:id="@+id/stop_scan_button"

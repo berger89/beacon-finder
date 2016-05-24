@@ -14,6 +14,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationSet;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -44,19 +48,23 @@ public class MonitorFragment extends Fragment implements BeaconConsumer {
     private static final int PERMISSION_COARSE_LOCATION = 1;
 
     private ListView listView;
+
     private TextView editText;
 
     private BeaconManager beaconManager;
 
-    HashMap<String, Beacon> beaconHashMap;
+    private HashMap<String, Beacon> beaconHashMap;
 
-
-    List<Beacon> unfindBeaconList = new ArrayList();
-
+    private List<Beacon> unfindBeaconList = new ArrayList();
 
     private OnFragmentInteractionListener mListener;
 
     private BeaconListAdapter adapter;
+
+    //Animation
+    ImageView startButtonOuterCircle;
+    ImageButton stopButton;
+    ImageView pulsingRing;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,6 +90,16 @@ public class MonitorFragment extends Fragment implements BeaconConsumer {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_monitor, container, false);
+
+        //Animation
+        startButtonOuterCircle = (ImageView) view.findViewById(R.id.scan_circle);
+
+        stopButton = (ImageButton) view.findViewById(R.id.stop_scan_button);
+
+        pulsingRing = (ImageView) view.findViewById(R.id.pulse_ring);
+        pulsingRing.setVisibility(View.INVISIBLE);
+
+        startAnimation();
 
         //UI
         listView = (ListView) view.findViewById(R.id.listview_beacons);
@@ -182,6 +200,7 @@ public class MonitorFragment extends Fragment implements BeaconConsumer {
                 unfindBeaconList.clear();
                 System.out.println(new Date());
                 if (beacons.size() > 0) {
+                    stopAnimation();
                     //Gelistete Beacon die bei der Suche nicht mehr gefunden wurden icon ausgrauen
                     for (Beacon foundBeacon : beaconHashMap.values())
                         if (!beacons.contains(foundBeacon))
@@ -250,7 +269,7 @@ public class MonitorFragment extends Fragment implements BeaconConsumer {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
@@ -267,6 +286,37 @@ public class MonitorFragment extends Fragment implements BeaconConsumer {
                 // Intentionally left blank
             }
         }, PERMISSION_COARSE_LOCATION, Assent.ACCESS_COARSE_LOCATION);
+    }
+
+
+    private void startAnimation() {
+        startButtonOuterCircle.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.anim_zoom_in));
+//        startButton.setImageResource(R.drawable.ic_circle);
+//        startButton.setVisibility(View.INVISIBLE);
+        stopButton.setVisibility(View.VISIBLE);
+        pulseAnimation();
+    }
+
+    private void stopAnimation() {
+        if (getActivity() != null)
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    startButtonOuterCircle.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.anim_zoom_out));
+                    pulsingRing.setVisibility(View.INVISIBLE);
+                    pulsingRing.clearAnimation();
+                    stopButton.setVisibility(View.INVISIBLE);
+
+                }
+            });
+
+    }
+
+    private void pulseAnimation() {
+        AnimationSet set = new AnimationSet(false);
+        set.addAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.anim_pulse));
+        pulsingRing.setVisibility(View.VISIBLE);
+        pulsingRing.startAnimation(set);
     }
 
 }

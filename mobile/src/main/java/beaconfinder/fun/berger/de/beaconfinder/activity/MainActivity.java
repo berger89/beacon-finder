@@ -26,7 +26,9 @@ import org.altbeacon.beacon.BeaconConsumer;
 
 import beaconfinder.fun.berger.de.beaconfinder.R;
 import beaconfinder.fun.berger.de.beaconfinder.fragment.MonitorFragment;
+import beaconfinder.fun.berger.de.beaconfinder.fragment.RestFragment;
 import beaconfinder.fun.berger.de.beaconfinder.fragment.TransmitterFragment;
+import beaconfinder.fun.berger.de.beaconfinder.fragment.TrilaterationFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, BeaconConsumer {
@@ -174,7 +176,12 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_transmitter:
                 fragment = new TransmitterFragment();
                 break;
-
+            case R.id.nav_database:
+                fragment = new RestFragment();
+                break;
+            case R.id.nav_trilateration:
+                fragment = new TrilaterationFragment();
+                break;
         }
 
         if (fragment != null) {

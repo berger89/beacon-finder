@@ -36,7 +36,7 @@ public class TransmitterFragment extends Fragment {
 
     private Transmitter transmitter;
     private BeaconManager beaconManager;
-    private boolean isTransmitting=false;
+    private boolean isTransmitting = false;
 
     ImageView startButtonOuterCircle;
     ImageButton startButton;
@@ -72,6 +72,7 @@ public class TransmitterFragment extends Fragment {
         });
 
         pulsingRing = (ImageView) view.findViewById(R.id.pulse_ring);
+        pulsingRing.setVisibility(View.INVISIBLE);
 
         beaconManager = BeaconManager.getInstanceForApplication(getActivity());
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) initBeaconTransmitService();
@@ -84,11 +85,14 @@ public class TransmitterFragment extends Fragment {
     void onScanButtonClick() {
         if (!Assent.isPermissionGranted(Assent.ACCESS_COARSE_LOCATION)) {
             requestLocationPermission();
-        } else {
+        } else if ((BeaconTransmitter.checkTransmissionSupported(getActivity()) == BeaconTransmitter.SUPPORTED)) {
             startAnimation();
             toggleTransmitting();
+        } else if (!(BeaconTransmitter.checkTransmissionSupported(getActivity()) == BeaconTransmitter.SUPPORTED)) {
+            notifyTransmittingNotSupported();
         }
     }
+
 
     private void toggleTransmitting() {
         if (!isTransmitting) startTransmitting();
@@ -128,12 +132,14 @@ public class TransmitterFragment extends Fragment {
         startButtonOuterCircle.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.anim_zoom_out));
         startButton.setImageResource(R.drawable.ic_button_transmit);
         stopButton.setVisibility(View.INVISIBLE);
+        pulsingRing.setVisibility(View.INVISIBLE);
         pulsingRing.clearAnimation();
     }
 
     private void pulseAnimation() {
         AnimationSet set = new AnimationSet(false);
         set.addAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.anim_pulse));
+        pulsingRing.setVisibility(View.VISIBLE);
         pulsingRing.startAnimation(set);
     }
 

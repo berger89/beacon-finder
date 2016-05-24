@@ -33,4 +33,7 @@ dependencies {
     compile 'com.android.support:design:23.4.0'
     compile 'org.altbeacon:android-beacon-library:2.8.1'
     compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.squareup.retrofit2:retrofit:2.0.2'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+    compile files('libs/commons-math3-3.5.jar')
 }
