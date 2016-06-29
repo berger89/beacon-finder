@@ -28,6 +28,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class MainActivity extends Activity implements BeaconConsumer, WearableListView.ClickListener {
 
     private static final int PERMISSION_COARSE_LOCATION = 1;
@@ -214,14 +218,21 @@ public class MainActivity extends Activity implements BeaconConsumer, WearableLi
 
     @Override
     public void onClick(WearableListView.ViewHolder viewHolder) {
-        switch (viewHolder.getAdapterPosition()) {
-            case 0:
-                Toast.makeText(this, "TEST", Toast.LENGTH_SHORT).show();
-                break;
-            case 1:
-                Toast.makeText(this, "TEST2", Toast.LENGTH_SHORT).show();
-                break;
-        }
+
+        BeaconService beaconService = BeaconService.retrofit.create(BeaconService.class);
+        Call<beaconfinder.fun.berger.de.beaconfinder.Beacon> call = beaconService.getBeaconLocation(1);
+        call.enqueue(new Callback<beaconfinder.fun.berger.de.beaconfinder.Beacon>() {
+            @Override
+            public void onResponse(Call<beaconfinder.fun.berger.de.beaconfinder.Beacon> call, Response<beaconfinder.fun.berger.de.beaconfinder.Beacon> response) {
+                Toast.makeText(MainActivity.this, response.body().getLocation(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<beaconfinder.fun.berger.de.beaconfinder.Beacon> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Failure!", Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
 
     @Override
