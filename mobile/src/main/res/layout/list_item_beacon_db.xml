@@ -24,7 +24,6 @@
         android:layout_height="wrap_content"
 
         android:layout_column="4"
-        android:layout_columnSpan="2"
         android:layout_columnWeight="1"
         android:layout_gravity="fill_horizontal|center_horizontal"
         android:layout_margin="2dp"
@@ -40,7 +39,6 @@
         android:layout_width="1dp"
         android:layout_height="wrap_content"
         android:layout_column="4"
-        android:layout_columnSpan="2"
         android:layout_columnWeight="1"
         android:layout_gravity="fill"
         android:layout_margin="2dp"
@@ -75,23 +73,6 @@
         android:text="Minor"
         android:textSize="11dp"/>
     <!--vierte Zeile-->
-    <TextView
-        android:id="@+id/type"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_column="1"
-        android:layout_columnSpan="2"
-        android:layout_columnWeight="1"
-        android:layout_gravity="fill_horizontal|center_horizontal"
-        android:layout_marginBottom="2dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="2dp"
-        android:layout_marginTop="2dp"
-        android:layout_row="0"
-        android:singleLine="false"
-        android:text="..."
-        android:textSize="11dp"
-        android:layout_rowSpan="4"/>
 
     <TextView
         android:id="@+id/maj_num"
@@ -114,6 +95,28 @@
         android:layout_gravity="fill_horizontal"
         android:layout_margin="2dp"
         android:layout_row="1"
+        android:text="..."
+        android:textSize="16dp"/>
+    <TextView
+        android:id="@+id/loc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="5"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill_horizontal"
+        android:layout_margin="2dp"
+        android:layout_row="2"
+        android:text="Location"
+        android:textSize="11dp"/>
+    <TextView
+        android:id="@+id/loctv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="5"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill_horizontal"
+        android:layout_margin="2dp"
+        android:layout_row="3"
         android:text="..."
         android:textSize="16dp"/>
 

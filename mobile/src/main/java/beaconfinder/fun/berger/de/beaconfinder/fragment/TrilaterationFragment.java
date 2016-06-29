@@ -9,9 +9,12 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.afollestad.assent.Assent;
 import com.afollestad.assent.AssentCallback;
@@ -39,6 +42,7 @@ import beaconfinder.fun.berger.de.beaconfinder.R;
 import beaconfinder.fun.berger.de.beaconfinder.util.LovelyView;
 import beaconfinder.fun.berger.de.beaconfinder.util.trilateration.NonLinearLeastSquaresSolver;
 import beaconfinder.fun.berger.de.beaconfinder.util.trilateration.Ponto;
+import beaconfinder.fun.berger.de.beaconfinder.util.trilateration.Tril;
 import beaconfinder.fun.berger.de.beaconfinder.util.trilateration.TrilaterationFunction;
 
 /**
@@ -48,9 +52,11 @@ public class TrilaterationFragment extends Fragment implements BeaconConsumer {
 
     private static final int PERMISSION_COARSE_LOCATION = 1;
 
-    private LovelyView centroid;
+    private ImageView centroid;
     DecimalFormat f = new DecimalFormat("#0.00");
     private BeaconManager beaconManager;
+    private Toast t;
+
 
     public TrilaterationFragment() {
         // Required empty public constructor
@@ -79,11 +85,11 @@ public class TrilaterationFragment extends Fragment implements BeaconConsumer {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_trilateration, container, false);
-        centroid = (LovelyView) view.findViewById(R.id.custView4);
-
+        centroid = (ImageView) view.findViewById(R.id.custView4);
+        t = new Toast(getApplicationContext());
 //        beaconManager.setAndroidLScanningDisabled(false);
 
-//        beaconManager.setForegroundBetweenScanPeriod(30000L);
+//        beaconManager.setForegroundBetweenScanPeriod(20000L);
         //Start Monitoring and Ranging
         beaconManager.bind(this);
 
@@ -140,28 +146,6 @@ public class TrilaterationFragment extends Fragment implements BeaconConsumer {
 
     }
 
-    private void getPos(double[] distancesBeacon) {
-        double[][] positions = new double[][]{{0.0, 0.0}, {0.0, 360.0}, {360.0, 180.0}};
-        double[] distances = new double[]{100.0, 100.0, 100.0};
-//        double[] distances = distancesBeacon;
-        NonLinearLeastSquaresSolver solver = new NonLinearLeastSquaresSolver(new TrilaterationFunction(positions, distances), new LevenbergMarquardtOptimizer());
-
-        System.out.println(distancesBeacon[0]);
-        System.out.println(distancesBeacon[1]);
-        System.out.println(distancesBeacon[2]);
-
-        LeastSquaresOptimizer.Optimum optimum = solver.solve();
-
-// the answer
-        double[] calculatedPosition = optimum.getPoint().toArray();
-        centroid.setX(new Double(calculatedPosition[0]).floatValue());
-        centroid.setY(new Double(calculatedPosition[1]).floatValue());
-        centroid.setLabelText(f.format(calculatedPosition[0]) + "..." + f.format(calculatedPosition[1]));
-
-// error and geometry information
-        RealVector standardDeviation = optimum.getSigma(0);
-        RealMatrix covarianceMatrix = optimum.getCovariances(0);
-    }
 
     @Override
     public void onBeaconServiceConnect() {
@@ -171,28 +155,84 @@ public class TrilaterationFragment extends Fragment implements BeaconConsumer {
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
                 final double[] distances = new double[3];
                 if (beacons.size() > 0) {
+                    int i = 0;
 
                     //Gefunde Beacon auflisten oder aktualisieren
                     for (Beacon beacon : beacons) {
-                        if (beacon.getId2().toString().equals("87") && beacon.getId3().toString().equals("61738"))
+                        if (beacon.getId2().toString().equals("87") && beacon.getId3().toString().equals("61738")) {
                             distances[0] = beacon.getDistance() * 100;
-                        else if (beacon.getId2().toString().equals("24") && beacon.getId3().toString().equals("22613"))
+                            i++;
+                        } else if (beacon.getId2().toString().equals("24") && beacon.getId3().toString().equals("22613")) {
                             distances[1] = beacon.getDistance() * 100;
-                        else if (beacon.getId2().toString().equals("87") && beacon.getId3().toString().equals("60330"))
+                            i++;
+                        } else if (beacon.getId2().toString().equals("87") && beacon.getId3().toString().equals("60330")) {
                             distances[2] = beacon.getDistance() * 100;
+                            i++;
+                        }
                     }
 
                     if (getActivity() == null)
                         return;
-
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+                    if (i == 3)
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
 //                            getPos(distances);
+//                            getLocationByTrilateration(new Ponto(360000, 10), distances[0], new Ponto(10, 10), distances[1], new Ponto(360, 360), distances[2]);
 
-                            getLocationByTrilateration(new Ponto(0, 360), distances[0], new Ponto(360, 0), distances[1], new Ponto(0, 0), distances[2]);
-                        }
-                    });
+
+                                Tril tril = new Tril();
+                                Ponto p1 = new Ponto(0, 0, 0, distances[0]);
+                                Ponto p2 = new Ponto(0, 350, 0, distances[1]);
+                                Ponto p3 = new Ponto(350, 350, 0, distances[2]);
+                                Ponto p4 = tril.trilaterate(p1, p2, p3, true);
+
+                                System.out.println("Dist OL " + distances[0]);
+                                System.out.println("Dist UL " + distances[1]);
+                                System.out.println("Dist UR " + distances[2]);
+                                System.out.println("X " + p4.getX() + " Y:" + p4.getY() + " ");
+
+                                if (p4 != null) {
+                                    t.cancel();
+                                    t.makeText(getActivity().getApplicationContext(), p4.getX() + "..." + p4.getY(), Toast.LENGTH_SHORT).show();
+
+                                    //dp in pix
+                                    DisplayMetrics dm = new DisplayMetrics();
+                                    getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
+                                    float xDpi = dm.xdpi;
+                                    float yDpi = dm.ydpi;
+                                    double px = (p4.getX()) * (xDpi / 160);
+                                    double py = (p4.getY()) * (yDpi / 160);
+
+//                                centroid.layout(300,300,0,0);
+                                    centroid.setY(new Double(py).intValue());
+                                    centroid.setX(new Double(px).intValue());
+//                                    if (p4.getX() < p4.getY() - 40) {
+//                                        centroid.setY(new Double(px).intValue());
+//                                        centroid.setX(new Double(px).intValue());
+//                                    }
+//                                    if (p4.getX() > p4.getY() + 10) {
+//                                        centroid.setY(new Double(py).intValue());
+//                                        centroid.setX(new Double(px).intValue());
+//                                    }
+//                                    else {
+//                                        centroid.setY(new Double(px).intValue());
+//                                        centroid.setX(new Double(py).intValue());
+//                                    }
+
+
+                                    System.out.println("Marker X pix: " + new Double(px).intValue() * 2);
+                                    System.out.println("Marker Y pix " + new Double(py).intValue() * 2);
+
+
+                                } else {
+//                                    t.cancel();
+//                                    t.makeText(getActivity().getApplicationContext(), p4 + "", Toast.LENGTH_SHORT).show();
+
+                                }
+
+                            }
+                        });
 
                 }
             }
@@ -205,6 +245,45 @@ public class TrilaterationFragment extends Fragment implements BeaconConsumer {
             beaconManager.startRangingBeaconsInRegion(new Region("myRangingUniqueId", null, null, null));
         } catch (RemoteException e) {
         }
+    }
+
+    private void getPos(double[] distancesBeacon) {
+//        double[][] positions = new double[][]{{0.00, 0.00}, {360.00, 360.00}, {360.00, 0.00}};
+//        double[] distances = new double[]{0.00, 360.00, 360.0};
+//        double[] distances = distancesBeacon;
+
+        double[][] positions = new double[][]{{5.0, -6.0}, {13.0, -15.0}, {21.0, -3.0}, {12.4, -21.2}};
+        double[] distances = new double[]{8.06, 13.97, 23.32, 15.31};
+
+        NonLinearLeastSquaresSolver solver = new NonLinearLeastSquaresSolver(new TrilaterationFunction(positions, distances), new LevenbergMarquardtOptimizer());
+
+        System.out.println(distancesBeacon[0]);
+        System.out.println(distancesBeacon[1]);
+        System.out.println(distancesBeacon[2]);
+
+        LeastSquaresOptimizer.Optimum optimum = solver.solve();
+
+// the answer
+        double[] calculatedPosition = optimum.getPoint().toArray();
+
+        DisplayMetrics dm = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
+        float xDpi = dm.xdpi;
+        float yDpi = dm.ydpi;
+        double px = (calculatedPosition[0]) * (xDpi / 160);
+        double py = (calculatedPosition[1]) * (yDpi / 160);
+
+        centroid.setX(new Double(px).floatValue());
+        centroid.setY(new Double(py).floatValue());
+        t = new Toast(getApplicationContext());
+        t.cancel();
+        t.makeText(getActivity().getApplicationContext(), px + "..." + py, Toast.LENGTH_SHORT).show();
+
+//        centroid.setLabelText(f.format(calculatedPosition[0]-100) + "...\n" + f.format(calculatedPosition[1]));
+
+// error and geometry information
+        RealVector standardDeviation = optimum.getSigma(0);
+        RealMatrix covarianceMatrix = optimum.getCovariances(0);
     }
 
     @Override
@@ -290,11 +369,11 @@ public class TrilaterationFragment extends Fragment implements BeaconConsumer {
 
         //TRANSFORMA O VALOR DE METROS PARA A UNIDADE DO MAPA
         //DISTANCIA ENTRE O PONTO 1 E A MINHA LOCALIZACAO
-        distance1 = (distance1 / 100000);
-        //DISTANCIA ENTRE O PONTO 2 E A MINHA LOCALIZACAO
-        distance2 = (distance2 / 100000);
-        //DISTANCIA ENTRE O PONTO 3 E A MINHA LOCALIZACAO
-        distance3 = (distance3 / 100000);
+//        distance1 = (distance1 / 100000);
+//        //DISTANCIA ENTRE O PONTO 2 E A MINHA LOCALIZACAO
+//        distance2 = (distance2 / 100000);
+//        //DISTANCIA ENTRE O PONTO 3 E A MINHA LOCALIZACAO
+//        distance3 = (distance3 / 100000);
 
         for (int i = 0; i < P1.length; i++) {
             t1 = P2[i];
@@ -354,12 +433,14 @@ public class TrilaterationFragment extends Fragment implements BeaconConsumer {
         retorno.setY(triptx);
 
 
-        centroid.setX(new Double(retorno.getX()).floatValue());
-        centroid.setY(new Double(retorno.getY()).floatValue());
+        centroid.setLeft(new Double(retorno.getX()).intValue());
+        centroid.setTop(new Double(retorno.getX()).intValue());
 
 
-        centroid.setLabelText(new Double(retorno.getX()).floatValue() + " - " + new Double(retorno.getY()).floatValue());
+//        centroid.setLabelText(new Double(retorno.getX()).floatValue() + "\n" + new Double(retorno.getY()).floatValue());
 
         return retorno;
     }
+
+
 }

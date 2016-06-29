@@ -78,10 +78,10 @@ public class MainActivity extends AppCompatActivity
 
         //Das erste Fragment was beim Start der App angezeigt wird
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.content_frame, new MonitorFragment());
+        transaction.replace(R.id.content_frame, new TrilaterationFragment());
         transaction.commit();
 
-        displayView(R.id.nav_monitor);
+        displayView(R.id.nav_trilateration);
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();

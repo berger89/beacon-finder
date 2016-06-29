@@ -9,11 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
-import java.text.DecimalFormat;
 import java.util.List;
 
 import beaconfinder.fun.berger.de.beaconfinder.R;
-import beaconfinder.fun.berger.de.beaconfinder.fragment.MonitorFragment;
 import beaconfinder.fun.berger.de.beaconfinder.webservice.pojo.Beacon;
 
 /**
@@ -42,10 +40,11 @@ public class BeaconsDBListAdapter extends ArrayAdapter<Beacon> {
             viewHolder = new ViewHolderItem();
 
             viewHolder.uuid_numTV = (TextView) view.findViewById(R.id.uuid_num);
-            viewHolder.typeTV = (TextView) view.findViewById(R.id.type);
+            viewHolder.location = (TextView) view.findViewById(R.id.loctv);
             viewHolder.maj_numTV = (TextView) view.findViewById(R.id.maj_num);
             viewHolder.min_numTV = (TextView) view.findViewById(R.id.min_num);
             viewHolder.bluetoothIV = (ImageView) view.findViewById(R.id.bluetooth_image);
+
             // store the holder with the view.
 
             view.setTag(viewHolder);
@@ -64,14 +63,14 @@ public class BeaconsDBListAdapter extends ArrayAdapter<Beacon> {
             if (viewHolder.uuid_numTV != null) {
                 viewHolder.uuid_numTV.setText(beacon.getUuid()+"");
             }
-            if (viewHolder.typeTV != null) {
-                viewHolder.typeTV.setText(beacon.getLocationName());
+            if (viewHolder.location != null) {
+                viewHolder.location.setText(beacon.getLocation());
             }
             if (viewHolder.maj_numTV != null) {
-                viewHolder.maj_numTV.setText(beacon.getMajMin()+"");
+                viewHolder.maj_numTV.setText(beacon.getMaj()+"");
             }
             if (viewHolder.min_numTV != null) {
-                viewHolder.min_numTV.setText(beacon.getMajMin()+"");
+                viewHolder.min_numTV.setText(beacon.getMin()+"");
             }
 
         }
@@ -81,7 +80,7 @@ public class BeaconsDBListAdapter extends ArrayAdapter<Beacon> {
 
     static class ViewHolderItem {
         TextView uuid_numTV;
-        TextView typeTV;
+        TextView location;
         TextView maj_numTV;
         TextView min_numTV;
         ImageView bluetoothIV;

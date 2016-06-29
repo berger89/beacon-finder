@@ -27,7 +27,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class RestFragment extends Fragment {
 
-    String url = "http://10.10.18.214:8080";
+    String url = "http://10.10.16.193:8080";
     private List<Beacon> beacons;
     private ListView beaconsListV;
     private BeaconsDBListAdapter adapter;

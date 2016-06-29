@@ -81,6 +81,7 @@ public class MainActivity extends Activity implements BeaconConsumer, WearableLi
 
                     }
                 });
+                listView.setClickListener(MainActivity.this);
 //                textView = (TextView) findViewById(R.id.testText);
 
             }

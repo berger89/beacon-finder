@@ -1,34 +1,32 @@
-<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:custom="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
+<HorizontalScrollView android:id="@+id/hsv"
+                      xmlns:android="http://schemas.android.com/apk/res/android"
+                      xmlns:custom="http://schemas.android.com/apk/res-auto"
 
-            android:id="@+id/hsv"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:fillViewport="true"
-            android:measureAllChildren="false"
-            android:scrollbars="none" >
+                      xmlns:tools="http://schemas.android.com/tools"
+                      android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_alignParentTop="true"
+                      android:fillViewport="true"
+                      android:measureAllChildren="false"
+                      android:scrollbars="none">
 
     <AbsoluteLayout
-        android:layout_width="400dp"
+        android:layout_width="360dp"
         android:layout_height="400dp">
 
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <beaconfinder.fun.berger.de.beaconfinder.util.LovelyView
+        <ImageView
             android:id="@+id/custView4"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-
-            android:layout_x="92dp"
-            android:layout_y="175dp"
-            custom:circleColor="#000"
-            custom:circleLabel="Centroid"
-            custom:labelColor="#FFF"/>
+            android:layout_x="102dp"
+            android:layout_y="98dp"
+            android:layout_marginLeft="180dp"
+            android:background="@drawable/location_icon"/>
 
         <beaconfinder.fun.berger.de.beaconfinder.util.LovelyView
             android:id="@+id/custView"
@@ -50,7 +48,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:layout_x="350dp"
+            android:layout_x="0dp"
             android:layout_y="0dp"
             custom:circleColor="#6C7B8B"
             custom:circleLabel="24/22613"
@@ -64,8 +62,8 @@
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:layout_x="0dp"
-            android:layout_y="0dp"
+            android:layout_x="330dp"
+            android:layout_y="360dp"
 
             custom:circleColor="#6C7B8B"
             custom:circleLabel="87/60330"

@@ -4,48 +4,67 @@ import java.io.Serializable;
 
 public class Beacon implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1302935866334228654L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1302935866334228654L;
 
-	private int majMin;
+    private int id;
 
-	private String uuid;
+    private String uuid;
 
-	private String locationName;
+    private String location;
 
-	public Beacon() {
-	}
+    private int maj;
 
-	public Beacon(int majMin, String uuid, String locationName) {
-		this.majMin = majMin;
-		this.uuid = uuid;
-		this.locationName = locationName;
-	}
+    private int min;
 
-	public String getUuid() {
-		return uuid;
-	}
+    public Beacon() {
+    }
 
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
-	}
+    public Beacon(int majMin, String uuid, String location) {
+        this.id = majMin;
+        this.uuid = uuid;
+        this.location = location;
+    }
 
-	public int getMajMin() {
-		return majMin;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public void setMajMin(int majMin) {
-		this.majMin = majMin;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public String getLocationName() {
-		return locationName;
-	}
+    public String getUuid() {
+        return uuid;
+    }
 
-	public void setLocationName(String locationName) {
-		this.locationName = locationName;
-	}
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
 
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public int getMaj() {
+        return maj;
+    }
+
+    public void setMaj(int maj) {
+        this.maj = maj;
+    }
+
+    public int getMin() {
+        return min;
+    }
+
+    public void setMin(int min) {
+        this.min = min;
+    }
 }
