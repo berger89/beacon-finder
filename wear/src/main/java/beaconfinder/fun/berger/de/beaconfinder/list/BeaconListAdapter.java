@@ -1,4 +1,4 @@
-package beaconfinder.fun.berger.de.beaconfinder;
+package beaconfinder.fun.berger.de.beaconfinder.list;
 
 import android.content.Context;
 import android.support.wearable.view.WearableListView;
@@ -12,6 +12,8 @@ import org.altbeacon.beacon.Beacon;
 
 import java.text.DecimalFormat;
 import java.util.List;
+
+import beaconfinder.fun.berger.de.beaconfinder.R;
 
 
 /**

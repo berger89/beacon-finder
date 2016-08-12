@@ -1,4 +1,4 @@
-package beaconfinder.fun.berger.de.beaconfinder;
+package beaconfinder.fun.berger.de.beaconfinder.rest;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

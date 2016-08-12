@@ -1,0 +1,27 @@
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="use_location"
+        android:summaryOff="@string/summary_hide"
+        android:summaryOn="@string/summary_show"
+        android:title="@string/title_location"
+        app:wear_iconOff="@drawable/ic_location_off_white_24dp"
+        app:wear_iconOn="@drawable/ic_location_on_white_24dp"
+        />
+
+    <ListPreference
+        android:defaultValue="en"
+        android:entries="@array/entries_language"
+        android:entryValues="@array/values_language"
+        android:icon="@drawable/ic_language_white_24dp"
+        android:key="language"
+        android:title="@string/title_language"
+        app:wear_entryIcons="@array/icons_language"
+        />
+
+
+</PreferenceScreen>

@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="AndroidSimplePreferences-0.3.1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/wear/build/intermediates/exploded-aar/com.github.brunodles/AndroidSimplePreferences/0.3.1/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/wear/build/intermediates/exploded-aar/com.github.brunodles/AndroidSimplePreferences/0.3.1/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.brunodles/AndroidSimplePreferences/0.3.1/51a261c7e11a5e976544fb2e46f5c3a4fec33698/AndroidSimplePreferences-0.3.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,4 +1,4 @@
-package beaconfinder.fun.berger.de.beaconfinder;
+package beaconfinder.fun.berger.de.beaconfinder.list;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -7,6 +7,8 @@ import android.support.wearable.view.WearableListView;
 import android.util.AttributeSet;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
+
+import beaconfinder.fun.berger.de.beaconfinder.R;
 
 /**
  * Created by Berger on 17.05.2016.

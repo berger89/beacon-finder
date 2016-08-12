@@ -3,17 +3,21 @@ package beaconfinder.fun.berger.de.beaconfinder;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.annotation.NonNull;
 import android.support.wearable.view.WatchViewStub;
 import android.support.wearable.view.WearableListView;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.assent.Assent;
 import com.afollestad.assent.AssentCallback;
 import com.afollestad.assent.PermissionResultSet;
+import com.github.brunodles.simplepreferences.lib.DaoPreferences;
 
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
@@ -28,6 +32,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import beaconfinder.fun.berger.de.beaconfinder.keyboard.DaoInputObject;
+import beaconfinder.fun.berger.de.beaconfinder.list.BeaconListAdapter;
+import beaconfinder.fun.berger.de.beaconfinder.preference.SettingsActivity;
+import beaconfinder.fun.berger.de.beaconfinder.rest.BeaconService;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,19 +50,28 @@ public class MainActivity extends Activity implements BeaconConsumer, WearableLi
     private List<Beacon> unfindBeaconList = new ArrayList();
     private int positionList;
     private TextView headerListView;
-//    private TextView textView;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+
         final WatchViewStub stub = (WatchViewStub) findViewById(R.id.watch_view_stub);
         stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
             @Override
             public void onLayoutInflated(WatchViewStub stub) {
                 listView = (WearableListView) findViewById(R.id.listview_beacons);
                 headerListView = (TextView) findViewById(R.id.header);
+                headerListView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent myIntent = new Intent(MainActivity.this, SettingsActivity.class);
+//                        myIntent.putExtra("key", value); //Optional parameters
+                        MainActivity.this.startActivity(myIntent);
+                    }
+                });
                 listView.setAdapter(new BeaconListAdapter(listView.getContext(), new ArrayList<Beacon>()));
                 listView.addOnScrollListener(new WearableListView.OnScrollListener() {
                     @Override
@@ -218,17 +235,16 @@ public class MainActivity extends Activity implements BeaconConsumer, WearableLi
 
     @Override
     public void onClick(WearableListView.ViewHolder viewHolder) {
-
         BeaconService beaconService = BeaconService.retrofit.create(BeaconService.class);
-        Call<beaconfinder.fun.berger.de.beaconfinder.Beacon> call = beaconService.getBeaconLocation(1);
-        call.enqueue(new Callback<beaconfinder.fun.berger.de.beaconfinder.Beacon>() {
+        Call<Boolean> call = beaconService.getBeaconLocation("beaconlocation");
+        call.enqueue(new Callback<Boolean>() {
             @Override
-            public void onResponse(Call<beaconfinder.fun.berger.de.beaconfinder.Beacon> call, Response<beaconfinder.fun.berger.de.beaconfinder.Beacon> response) {
-                Toast.makeText(MainActivity.this, response.body().getLocation(), Toast.LENGTH_SHORT).show();
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                Toast.makeText(MainActivity.this, "Request gesendet: " + response.body(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onFailure(Call<beaconfinder.fun.berger.de.beaconfinder.Beacon> call, Throwable t) {
+            public void onFailure(Call<Boolean> call, Throwable t) {
                 Toast.makeText(MainActivity.this, "Failure!", Toast.LENGTH_SHORT).show();
 
             }
@@ -264,10 +280,12 @@ public class MainActivity extends Activity implements BeaconConsumer, WearableLi
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        beaconManager.unbind(this);
+//        beaconManager.unbind(this);
     }
 
     public void toast(String text) {
         Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
     }
+
+
 }
