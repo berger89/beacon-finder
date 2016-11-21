@@ -26,9 +26,6 @@ import org.altbeacon.beacon.BeaconConsumer;
 
 import beaconfinder.fun.berger.de.beaconfinder.R;
 import beaconfinder.fun.berger.de.beaconfinder.fragment.MonitorFragment;
-import beaconfinder.fun.berger.de.beaconfinder.fragment.RestFragment;
-import beaconfinder.fun.berger.de.beaconfinder.fragment.TransmitterFragment;
-import beaconfinder.fun.berger.de.beaconfinder.fragment.TrilaterationFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, BeaconConsumer {
@@ -55,7 +52,7 @@ public class MainActivity extends AppCompatActivity
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -78,10 +75,11 @@ public class MainActivity extends AppCompatActivity
 
         //Das erste Fragment was beim Start der App angezeigt wird
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.content_frame, new TrilaterationFragment());
+        transaction.replace(R.id.content_frame, new MonitorFragment(),"MonitorFragment");
+        transaction.addToBackStack("MonitorFragment");
         transaction.commit();
 
-        displayView(R.id.nav_trilateration);
+        displayView(R.id.nav_monitor);
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
@@ -136,22 +134,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Intent settingsIntent = new Intent(this, SettingsActivity.class);
-            startActivity(settingsIntent);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -173,15 +156,15 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_monitor:
                 fragment = new MonitorFragment();
                 break;
-            case R.id.nav_transmitter:
-                fragment = new TransmitterFragment();
-                break;
-            case R.id.nav_database:
-                fragment = new RestFragment();
-                break;
-            case R.id.nav_trilateration:
-                fragment = new TrilaterationFragment();
-                break;
+//            case R.id.nav_transmitter:
+//                fragment = new TransmitterFragment();
+//                break;
+//            case R.id.nav_database:
+//                fragment = new RestFragment();
+//                break;
+//            case R.id.nav_trilateration:
+//                fragment = new TrilaterationFragment();
+//                break;
         }
 
         if (fragment != null) {

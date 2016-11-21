@@ -6,11 +6,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.os.RemoteException;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +33,8 @@ import org.altbeacon.beacon.Region;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -76,6 +77,15 @@ public class MonitorFragment extends Fragment implements BeaconConsumer {
         beaconManager = BeaconManager.getInstanceForApplication(getActivity());
         //BEACON PARSER
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:0-3=4c000215,i:4-19,i:20-21,i:22-23,p:24-24"));
+        // Detect the main identifier (UID) frame:
+        beaconManager.getBeaconParsers().add(new BeaconParser().
+                setBeaconLayout("s:0-1=feaa,m:2-2=00,p:3-3:-41,i:4-13,i:14-19"));
+        // Detect the telemetry (TLM) frame:
+        beaconManager.getBeaconParsers().add(new BeaconParser().
+                setBeaconLayout("x,s:0-1=feaa,m:2-2=20,d:3-3,d:4-5,d:6-7,d:8-11,d:12-15"));
+        // Detect the URL frame:
+        beaconManager.getBeaconParsers().add(new BeaconParser().
+                setBeaconLayout("s:0-1=feaa,m:2-2=10,p:3-3:-41,i:4-21v"));
 //        beaconManager.debug = true;
         beaconHashMap = new HashMap<String, Beacon>();
         if (!Assent.isPermissionGranted(Assent.ACCESS_COARSE_LOCATION)) {
@@ -103,9 +113,6 @@ public class MonitorFragment extends Fragment implements BeaconConsumer {
 
         //UI
         listView = (ListView) view.findViewById(R.id.listview_beacons);
-
-        adapter = new BeaconListAdapter(listView.getContext(), R.layout.list_item_beacon, new ArrayList(beaconHashMap.values()));
-        listView.setAdapter(adapter);
 
         //Check for bluetooth and Scan for Beacon
 //        verifyBluetooth();
@@ -194,7 +201,7 @@ public class MonitorFragment extends Fragment implements BeaconConsumer {
     @Override
     public void onBeaconServiceConnect() {
 
-        beaconManager.setRangeNotifier(new RangeNotifier() {
+        beaconManager.addRangeNotifier(new RangeNotifier() {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
                 unfindBeaconList.clear();
@@ -220,10 +227,29 @@ public class MonitorFragment extends Fragment implements BeaconConsumer {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            Parcelable state = listView.onSaveInstanceState();
+
 //                            BeaconListAdapter adapter = new BeaconListAdapter(listView.getContext(), R.layout.list_item_beacon, new ArrayList(beaconHashMap.values()));
 //                            listView.setAdapter(adapter);
+                            adapter = new BeaconListAdapter(listView.getContext(), R.layout.list_item_beacon, new ArrayList(beaconHashMap.values()));
                             adapter.clear();
-                            adapter.addAll(new ArrayList(beaconHashMap.values()));
+                            List arrayList = new ArrayList(beaconHashMap.values());
+                            //Sort
+                            Collections.sort(arrayList, new Comparator<Beacon>() {
+                                @Override
+                                public int compare(Beacon b1, Beacon b2) {
+                                    String mac1 = b1.getBluetoothAddress();
+                                    String mac2 = b2.getBluetoothAddress();
+
+                                    return mac1.compareTo(mac2);
+                                }
+                            });
+                            adapter.addAll(arrayList);
+                            // Save the ListView state (= includes scroll position) as a Parceble e.g. set new items
+                            listView.setAdapter(adapter);
+
+                            // Restore previous state (including selected item index and scroll position)
+                            listView.onRestoreInstanceState(state);
                         }
                     });
 

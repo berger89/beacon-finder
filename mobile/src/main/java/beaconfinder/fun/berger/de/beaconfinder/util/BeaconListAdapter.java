@@ -1,5 +1,7 @@
 package beaconfinder.fun.berger.de.beaconfinder.util;
 
+import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,10 +11,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.altbeacon.beacon.Beacon;
+import org.altbeacon.beacon.utils.UrlBeaconUrlCompressor;
 
 import java.text.DecimalFormat;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
+import beaconfinder.fun.berger.de.beaconfinder.activity.MainActivity;
 import beaconfinder.fun.berger.de.beaconfinder.fragment.MonitorFragment;
 import beaconfinder.fun.berger.de.beaconfinder.R;
 
@@ -27,7 +34,8 @@ public class BeaconListAdapter extends ArrayAdapter<Beacon> {
     public BeaconListAdapter(Context context, int layoutResource, List<Beacon> threeStringsList) {
         super(context, layoutResource, threeStringsList);
         this.layoutResource = layoutResource;
-//        monitoringFrag = (MainActivity) context;
+        FragmentManager fm = ((Activity) context).getFragmentManager();
+        monitoringFrag = (MonitorFragment) fm.findFragmentByTag("MonitorFragment");
     }
 
     @Override
@@ -66,8 +74,6 @@ public class BeaconListAdapter extends ArrayAdapter<Beacon> {
         Beacon beacon = getItem(position);
 
         if (beacon != null) {
-
-
             if (viewHolder.distanceTV != null) {
                 if (beacon.getDistance() < 0.51)
                     viewHolder.distanceTV.setText("immediate");
@@ -75,16 +81,17 @@ public class BeaconListAdapter extends ArrayAdapter<Beacon> {
                     viewHolder.distanceTV.setText("near");
                 else if (beacon.getDistance() > 3.0)
                     viewHolder.distanceTV.setText("far");
-//                if (monitoringFrag.getUnfindBeaconList().contains(beacon)) {
-//                    viewHolder.bluetoothIV.setImageResource(R.drawable.wifi_icon_grey);
-//                    if (beacon.getExtraDataFields() != null && beacon.getExtraDataFields().size() > 0) {
-//                        Date d1 = new Date();
-//                        Date d2 = new Date();
-//                        d2.setTime(beacon.getExtraDataFields().get(0));
-//                        long seconds = (d1.getTime() - d2.getTime()) / 1000;
-//                        viewHolder.distanceTV.setText(seconds + "seconds");
-//                    }
-//                }
+                if (monitoringFrag.getUnfindBeaconList().contains(beacon)) {
+                    viewHolder.bluetoothIV.setImageResource(R.drawable.wifi_icon_grey);
+                    if (beacon.getExtraDataFields() != null && beacon.getExtraDataFields().size() > 0) {
+                        Date d1 = new Date();
+                        Date d2 = new Date();
+                        d2.setTime(beacon.getExtraDataFields().get(0));
+                        long seconds = (d1.getTime() - d2.getTime()) / 1000;
+                        viewHolder.distanceTV.setText(seconds + "seconds");
+                    }
+                } else
+                    viewHolder.bluetoothIV.setImageResource(R.drawable.wifi_icon);
             }
 
 
@@ -96,7 +103,13 @@ public class BeaconListAdapter extends ArrayAdapter<Beacon> {
                 viewHolder.tx_dbmTV.setText(beacon.getTxPower() + " dBm");
             }
             if (viewHolder.uuid_numTV != null) {
-                viewHolder.uuid_numTV.setText(beacon.getId1().toString().split("-")[4] + "");
+                if (beacon.getId1().toString().split("-").length > 4)
+                    viewHolder.uuid_numTV.setText(beacon.getId1().toString().split("-")[4] + "");
+                else if (beacon.getServiceUuid() == 0xfeaa && beacon.getBeaconTypeCode() == 0x10) {
+                    // This is a Eddystone-URL frame
+                    String url = UrlBeaconUrlCompressor.uncompress(beacon.getId1().toByteArray());
+                    viewHolder.uuid_numTV.setText(url);
+                }
             }
             if (viewHolder.typeTV != null) {
                 viewHolder.typeTV.setText(beacon.getBluetoothName());
@@ -105,10 +118,12 @@ public class BeaconListAdapter extends ArrayAdapter<Beacon> {
                 viewHolder.distTV.setText(new DecimalFormat("#.###").format(beacon.getDistance()) + "m");
             }
             if (viewHolder.maj_numTV != null) {
-                viewHolder.maj_numTV.setText(beacon.getId2() + "");
+                if (beacon.getIdentifiers().size() > 1)
+                    viewHolder.maj_numTV.setText(beacon.getId2() + "");
             }
             if (viewHolder.min_numTV != null) {
-                viewHolder.min_numTV.setText(beacon.getId3() + "");
+                if (beacon.getIdentifiers().size() > 2)
+                    viewHolder.min_numTV.setText(beacon.getId3() + "");
             }
 
         }
@@ -127,5 +142,7 @@ public class BeaconListAdapter extends ArrayAdapter<Beacon> {
         TextView min_numTV;
         ImageView bluetoothIV;
     }
+
+
 }
 
