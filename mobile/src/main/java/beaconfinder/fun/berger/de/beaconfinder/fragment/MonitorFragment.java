@@ -10,11 +10,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.os.RemoteException;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -28,6 +30,7 @@ import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
 import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
+import org.altbeacon.beacon.Identifier;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
@@ -42,7 +45,7 @@ import java.util.List;
 import beaconfinder.fun.berger.de.beaconfinder.R;
 import beaconfinder.fun.berger.de.beaconfinder.util.BeaconListAdapter;
 
-public class MonitorFragment extends Fragment implements BeaconConsumer {
+public class MonitorFragment extends Fragment implements BeaconConsumer, RangeNotifier {
 
     protected static final String TAG = "MonitoringFrag";
 
@@ -76,16 +79,20 @@ public class MonitorFragment extends Fragment implements BeaconConsumer {
 
         beaconManager = BeaconManager.getInstanceForApplication(getActivity());
         //BEACON PARSER
-        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:0-3=4c000215,i:4-19,i:20-21,i:22-23,p:24-24"));
+//        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(BeaconParser.ALTBEACON_LAYOUT));
         // Detect the main identifier (UID) frame:
         beaconManager.getBeaconParsers().add(new BeaconParser().
-                setBeaconLayout("s:0-1=feaa,m:2-2=00,p:3-3:-41,i:4-13,i:14-19"));
+                setBeaconLayout(BeaconParser.EDDYSTONE_UID_LAYOUT));
         // Detect the telemetry (TLM) frame:
         beaconManager.getBeaconParsers().add(new BeaconParser().
-                setBeaconLayout("x,s:0-1=feaa,m:2-2=20,d:3-3,d:4-5,d:6-7,d:8-11,d:12-15"));
+                setBeaconLayout(BeaconParser.EDDYSTONE_TLM_LAYOUT));
         // Detect the URL frame:
         beaconManager.getBeaconParsers().add(new BeaconParser().
-                setBeaconLayout("s:0-1=feaa,m:2-2=10,p:3-3:-41,i:4-21v"));
+                setBeaconLayout(BeaconParser.EDDYSTONE_URL_LAYOUT));
+        // Detect Eddystone-EID
+        beaconManager.getBeaconParsers().add(new BeaconParser().
+                setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"));
+
 //        beaconManager.debug = true;
         beaconHashMap = new HashMap<String, Beacon>();
         if (!Assent.isPermissionGranted(Assent.ACCESS_COARSE_LOCATION)) {
@@ -200,70 +207,13 @@ public class MonitorFragment extends Fragment implements BeaconConsumer {
 
     @Override
     public void onBeaconServiceConnect() {
-
-        beaconManager.addRangeNotifier(new RangeNotifier() {
-            @Override
-            public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
-                unfindBeaconList.clear();
-                System.out.println(new Date());
-                if (beacons.size() > 0) {
-                    stopAnimation();
-                    //Gelistete Beacon die bei der Suche nicht mehr gefunden wurden icon ausgrauen
-                    for (Beacon foundBeacon : beaconHashMap.values())
-                        if (!beacons.contains(foundBeacon))
-                            unfindBeaconList.add(foundBeacon);
-
-                    //Gefunde Beacon auflisten oder aktualisieren
-                    for (Beacon beacon : beacons) {
-                        List<Long> l = new ArrayList<>();
-                        l.add(new Date().getTime());
-                        beacon.setExtraDataFields(l);
-                        beaconHashMap.put(beacon.getBluetoothAddress(), beacon);
-                    }
-
-                    if (getActivity() == null)
-                        return;
-
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Parcelable state = listView.onSaveInstanceState();
-
-//                            BeaconListAdapter adapter = new BeaconListAdapter(listView.getContext(), R.layout.list_item_beacon, new ArrayList(beaconHashMap.values()));
-//                            listView.setAdapter(adapter);
-                            adapter = new BeaconListAdapter(listView.getContext(), R.layout.list_item_beacon, new ArrayList(beaconHashMap.values()));
-                            adapter.clear();
-                            List arrayList = new ArrayList(beaconHashMap.values());
-                            //Sort
-                            Collections.sort(arrayList, new Comparator<Beacon>() {
-                                @Override
-                                public int compare(Beacon b1, Beacon b2) {
-                                    String mac1 = b1.getBluetoothAddress();
-                                    String mac2 = b2.getBluetoothAddress();
-
-                                    return mac1.compareTo(mac2);
-                                }
-                            });
-                            adapter.addAll(arrayList);
-                            // Save the ListView state (= includes scroll position) as a Parceble e.g. set new items
-                            listView.setAdapter(adapter);
-
-                            // Restore previous state (including selected item index and scroll position)
-                            listView.onRestoreInstanceState(state);
-                        }
-                    });
-
-                }
-            }
-
-        });
-
+        Region region = new Region("all-beacons-region", null, null, null);
         try {
-            Region region = new Region("myRangingUniqueId", null, null, null);
-            beaconManager.stopMonitoringBeaconsInRegion(region);
-            beaconManager.startRangingBeaconsInRegion(new Region("myRangingUniqueId", null, null, null));
+            beaconManager.startRangingBeaconsInRegion(region);
         } catch (RemoteException e) {
+            e.printStackTrace();
         }
+        beaconManager.addRangeNotifier(this);
     }
 
     @Override
@@ -287,6 +237,70 @@ public class MonitorFragment extends Fragment implements BeaconConsumer {
 
     public void setUnfindBeaconList(List<Beacon> unfindBeaconList) {
         this.unfindBeaconList = unfindBeaconList;
+    }
+
+    @Override
+    public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
+
+
+        unfindBeaconList.clear();
+        System.out.println(new Date());
+        if (beacons.size() > 0) {
+            stopAnimation();
+//            //Gelistete Beacon die bei der Suche nicht mehr gefunden wurden icon ausgrauen
+//            for (Beacon foundBeacon : beaconHashMap.values())
+//                if (!beacons.contains(foundBeacon))
+//                    unfindBeaconList.add(foundBeacon);
+//
+//            //Gefunde Beacon auflisten oder aktualisieren
+//            for (Beacon beacon : beacons) {
+//                List<Long> l = new ArrayList<>();
+//                l.add(new Date().getTime());
+//                beacon.setExtraDataFields(l);
+//                beaconHashMap.put(beacon.getBluetoothAddress(), beacon);
+//            }
+            for (Beacon beacon : beacons)
+                beaconHashMap.put(beacon.getId1().toHexString(), beacon);
+
+            if (getActivity() == null)
+                return;
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Parcelable state = listView.onSaveInstanceState();
+
+//                            BeaconListAdapter adapter = new BeaconListAdapter(listView.getContext(), R.layout.list_item_beacon, new ArrayList(beaconHashMap.values()));
+//                            listView.setAdapter(adapter);
+                    adapter = new BeaconListAdapter(listView.getContext(), R.layout.list_item_beacon2, new ArrayList(beaconHashMap.values()));
+                    adapter.clear();
+                    List arrayList = new ArrayList(beaconHashMap.values());
+                    //Sort
+                    Collections.sort(arrayList, new Comparator<Beacon>() {
+                        @Override
+                        public int compare(Beacon b1, Beacon b2) {
+                            String mac1 = b1.getBluetoothAddress();
+                            String mac2 = b2.getBluetoothAddress();
+
+                            return mac1.compareTo(mac2);
+                        }
+                    });
+                    adapter.addAll(arrayList);
+                    // Save the ListView state (= includes scroll position) as a Parceble e.g. set new items
+                    listView.setAdapter(adapter);
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            Log.d("############", "Items " + beaconHashMap.get(i));
+                        }
+                    });
+
+                    // Restore previous state (including selected item index and scroll position)
+                    listView.onRestoreInstanceState(state);
+                }
+            });
+
+        }
     }
 
 

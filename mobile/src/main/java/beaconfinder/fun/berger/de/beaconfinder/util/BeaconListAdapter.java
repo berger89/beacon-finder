@@ -3,10 +3,13 @@ package beaconfinder.fun.berger.de.beaconfinder.util;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -42,27 +45,30 @@ public class BeaconListAdapter extends ArrayAdapter<Beacon> {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolderItem viewHolder;
 
-        View view = convertView;
-
-        if (view == null) {
+        if (convertView == null) {
             LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-            view = layoutInflater.inflate(layoutResource, null);
+            convertView = layoutInflater.inflate(layoutResource, null);
             // well set up the ViewHolder
 
             viewHolder = new ViewHolderItem();
+            viewHolder.protocolTV = (TextView) convertView.findViewById(R.id.protocol);
+            viewHolder.typeTV = (TextView) convertView.findViewById(R.id.name);
+            viewHolder.uuid_numTV = (TextView) convertView.findViewById(R.id.uuid);
+            viewHolder.maj_numTV = (TextView) convertView.findViewById(R.id.maj_num);
+            viewHolder.min_numTV = (TextView) convertView.findViewById(R.id.min_num);
+            viewHolder.rssi_dbmTV = (TextView) convertView.findViewById(R.id.rssi);
+            viewHolder.urlTV = (TextView) convertView.findViewById(R.id.url);
 
-            viewHolder.distanceTV = (TextView) view.findViewById(R.id.distance);
-            viewHolder.rssi_dbmTV = (TextView) view.findViewById(R.id.rssi_dbm);
-            viewHolder.tx_dbmTV = (TextView) view.findViewById(R.id.tx_dbm);
-            viewHolder.uuid_numTV = (TextView) view.findViewById(R.id.uuid_num);
-            viewHolder.typeTV = (TextView) view.findViewById(R.id.type);
-            viewHolder.distTV = (TextView) view.findViewById(R.id.dist_m);
-            viewHolder.maj_numTV = (TextView) view.findViewById(R.id.maj_num);
-            viewHolder.min_numTV = (TextView) view.findViewById(R.id.min_num);
-            viewHolder.bluetoothIV = (ImageView) view.findViewById(R.id.bluetooth_image);
+            viewHolder.urlBtn = (Button) convertView.findViewById(R.id.url_btn);
+            viewHolder.urlBtn.setVisibility(View.GONE);
+//            viewHolder.distanceTV = (TextView) convertView.findViewById(R.id.distance);
+//            viewHolder.tx_dbmTV = (TextView) convertView.findViewById(R.id.tx_dbm);
+//            viewHolder.distTV = (TextView) convertView.findViewById(R.id.dist_m);
+
+            viewHolder.bluetoothIV = (ImageView) convertView.findViewById(R.id.bluetooth_image);
             // store the holder with the view.
 
-            view.setTag(viewHolder);
+            convertView.setTag(viewHolder);
 
         } else {
             // we've just avoided calling findViewById() on resource everytime
@@ -74,60 +80,66 @@ public class BeaconListAdapter extends ArrayAdapter<Beacon> {
         Beacon beacon = getItem(position);
 
         if (beacon != null) {
+            if(beacon.getIdentifiers().size()>1)
+                beacon.getId1();
             if (viewHolder.distanceTV != null) {
                 if (beacon.getDistance() < 0.51)
-                    viewHolder.distanceTV.setText("immediate");
+                    viewHolder.distanceTV.append(" "+"immediate");
                 else if (beacon.getDistance() < 3.01)
-                    viewHolder.distanceTV.setText("near");
+                    viewHolder.distanceTV.append(" "+"near");
                 else if (beacon.getDistance() > 3.0)
-                    viewHolder.distanceTV.setText("far");
+                    viewHolder.distanceTV.append(" "+"far");
                 if (monitoringFrag.getUnfindBeaconList().contains(beacon)) {
-                    viewHolder.bluetoothIV.setImageResource(R.drawable.wifi_icon_grey);
+//                    viewHolder.bluetoothIV.setImageResource(R.drawable.wifi_icon_grey);
+                    viewHolder.typeTV.setTextColor(Color.GRAY);
                     if (beacon.getExtraDataFields() != null && beacon.getExtraDataFields().size() > 0) {
                         Date d1 = new Date();
                         Date d2 = new Date();
                         d2.setTime(beacon.getExtraDataFields().get(0));
                         long seconds = (d1.getTime() - d2.getTime()) / 1000;
-                        viewHolder.distanceTV.setText(seconds + "seconds");
+                        viewHolder.distanceTV.append(" "+seconds + "seconds");
                     }
                 } else
-                    viewHolder.bluetoothIV.setImageResource(R.drawable.wifi_icon);
+                    viewHolder.typeTV.setTextColor(Color.BLUE);
+
+//                    viewHolder.bluetoothIV.setImageResource(R.drawable.wifi_icon);
             }
 
 
             if (viewHolder.rssi_dbmTV != null) {
-                viewHolder.rssi_dbmTV.setText(beacon.getRssi() + " dBm");
+                viewHolder.rssi_dbmTV.append(" "+beacon.getRssi() + " dBm");
             }
 
             if (viewHolder.tx_dbmTV != null) {
-                viewHolder.tx_dbmTV.setText(beacon.getTxPower() + " dBm");
+                viewHolder.tx_dbmTV.append(" "+beacon.getTxPower() + " dBm");
             }
             if (viewHolder.uuid_numTV != null) {
                 if (beacon.getId1().toString().split("-").length > 4)
-                    viewHolder.uuid_numTV.setText(beacon.getId1().toString().split("-")[4] + "");
+                    viewHolder.uuid_numTV.append(" "+beacon.getId1().toString().split("-")[4] + "");
                 else if (beacon.getServiceUuid() == 0xfeaa && beacon.getBeaconTypeCode() == 0x10) {
                     // This is a Eddystone-URL frame
                     String url = UrlBeaconUrlCompressor.uncompress(beacon.getId1().toByteArray());
-                    viewHolder.uuid_numTV.setText(url);
+                    viewHolder.urlTV.append(" "+url);
+                    viewHolder.urlBtn.setVisibility(View.VISIBLE);
                 }
             }
             if (viewHolder.typeTV != null) {
-                viewHolder.typeTV.setText(beacon.getBluetoothName());
+                viewHolder.typeTV.append(" "+beacon.getBluetoothName());
             }
             if (viewHolder.distTV != null) {
-                viewHolder.distTV.setText(new DecimalFormat("#.###").format(beacon.getDistance()) + "m");
+                viewHolder.distTV.append(" "+new DecimalFormat("#.###").format(beacon.getDistance()) + "m");
             }
             if (viewHolder.maj_numTV != null) {
                 if (beacon.getIdentifiers().size() > 1)
-                    viewHolder.maj_numTV.setText(beacon.getId2() + "");
+                    viewHolder.maj_numTV.append(" "+beacon.getId2() + "");
             }
             if (viewHolder.min_numTV != null) {
                 if (beacon.getIdentifiers().size() > 2)
-                    viewHolder.min_numTV.setText(beacon.getId3() + "");
+                    viewHolder.min_numTV.append(" "+beacon.getId3() + "");
             }
 
         }
-        return view;
+        return convertView;
 
     }
 
@@ -140,6 +152,10 @@ public class BeaconListAdapter extends ArrayAdapter<Beacon> {
         TextView distTV;
         TextView maj_numTV;
         TextView min_numTV;
+        TextView protocolTV;
+        TextView urlTV;
+
+        Button urlBtn;
         ImageView bluetoothIV;
     }
 

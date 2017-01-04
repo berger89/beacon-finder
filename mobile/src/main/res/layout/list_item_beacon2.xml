@@ -1,0 +1,101 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:columnCount="6"
+    android:padding="4dp"
+    android:rowCount="4">
+
+    <ImageView
+        android:id="@+id/bluetooth_image"
+        android:layout_width="30dp"
+        android:layout_height="50dp"
+        android:layout_margin="2dp"
+        android:src="@drawable/wifi_icon" />
+
+    <TextView
+        android:id="@+id/protocol"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_toRightOf="@+id/bluetooth_image"
+        android:text="Eddystone (UID)"
+        android:textSize="14dp" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/protocol"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/bluetooth_image"
+        android:text="Name:"
+        android:textSize="11dp" />
+
+    <TextView
+        android:id="@+id/uuid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/name"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/bluetooth_image"
+        android:text="UUID:"
+        android:textSize="11dp" />
+
+    <TextView
+        android:id="@+id/maj_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/uuid"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/bluetooth_image"
+        android:text="Maj:"
+        android:textSize="11dp" />
+
+    <TextView
+        android:id="@+id/min_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/maj_num"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/bluetooth_image"
+        android:text="Min:"
+        android:textSize="11dp" />
+
+    <TextView
+        android:id="@+id/rssi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/min_num"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/bluetooth_image"
+        android:text="RSSI:"
+        android:textSize="11dp" />
+
+    <TextView
+        android:id="@+id/url"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rssi"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/bluetooth_image"
+        android:text="URL:"
+        android:textSize="11dp" />
+
+    <Button
+        android:id="@+id/url_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:text="Open URL" />
+
+    <TextView
+        android:id="@+id/raw_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/url_btn"
+        android:text="RAW DATA"
+        android:textColor="@android:color/holo_blue_light"/>
+
+</RelativeLayout>
