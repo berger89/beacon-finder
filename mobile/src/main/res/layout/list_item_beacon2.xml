@@ -1,101 +1,203 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:layout_centerHorizontal="true"
-    android:columnCount="6"
-    android:padding="4dp"
-    android:rowCount="4">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:columnCount="6"
+                android:padding="4dp"
+                android:rowCount="4">
 
     <ImageView
         android:id="@+id/bluetooth_image"
-        android:layout_width="30dp"
-        android:layout_height="50dp"
-        android:layout_margin="2dp"
-        android:src="@drawable/wifi_icon" />
+        android:layout_width="35dp"
+        android:layout_height="55dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="2dp"
+        android:src="@drawable/wifi_icon"
+        />
 
     <TextView
-        android:id="@+id/protocol"
+        android:id="@+id/rssi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:layout_toRightOf="@+id/bluetooth_image"
-        android:text="Eddystone (UID)"
-        android:textSize="14dp" />
+        android:layout_below="@+id/bluetooth_image"
+        android:layout_marginLeft="10dp"
+        android:elevation="0dp"
+        android:text="RSSI:\n"
+        android:textSize="11dp"/>
+
 
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/protocol"
-        android:layout_marginLeft="5dp"
         android:layout_toRightOf="@+id/bluetooth_image"
-        android:text="Name:"
-        android:textSize="11dp" />
+        android:text="Unknown"
+        android:textSize="18dp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/iBeacon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/name"
+        android:layout_toRightOf="@+id/bluetooth_image"
+        android:text="iBeacon"
+        android:textSize="14dp"
+        android:textStyle="bold"/>
+
 
     <TextView
         android:id="@+id/uuid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/name"
-        android:layout_marginLeft="5dp"
+        android:layout_below="@+id/iBeacon"
+
         android:layout_toRightOf="@+id/bluetooth_image"
         android:text="UUID:"
-        android:textSize="11dp" />
+        android:textSize="11dp"/>
 
     <TextView
         android:id="@+id/maj_num"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/uuid"
-        android:layout_marginLeft="5dp"
+
         android:layout_toRightOf="@+id/bluetooth_image"
         android:text="Maj:"
-        android:textSize="11dp" />
+        android:textSize="11dp"/>
 
     <TextView
         android:id="@+id/min_num"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/maj_num"
-        android:layout_marginLeft="5dp"
+
         android:layout_toRightOf="@+id/bluetooth_image"
         android:text="Min:"
-        android:textSize="11dp" />
+        android:textSize="11dp"/>
 
     <TextView
-        android:id="@+id/rssi"
+        android:id="@+id/eddystone_uid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/min_num"
-        android:layout_marginLeft="5dp"
+
         android:layout_toRightOf="@+id/bluetooth_image"
-        android:text="RSSI:"
-        android:textSize="11dp" />
+        android:text="Eddystone UID"
+        android:textSize="14dp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/namespace"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/eddystone_uid"
+
+        android:layout_toRightOf="@+id/bluetooth_image"
+        android:text="Namespace ID:"
+        android:textSize="11dp"/>
+
+    <TextView
+        android:id="@+id/instance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/namespace"
+
+        android:layout_toRightOf="@+id/bluetooth_image"
+        android:text="Instance ID:"
+        android:textSize="11dp"/>
+
+
+    <TextView
+        android:id="@+id/eddystone_tlm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/instance"
+
+        android:layout_toRightOf="@+id/bluetooth_image"
+        android:text="Eddystone TLM"
+        android:textSize="14dp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/tele_vers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/eddystone_tlm"
+
+        android:layout_toRightOf="@+id/bluetooth_image"
+        android:text="Telemetry version: "
+        android:textSize="11dp"/>
+
+    <TextView
+        android:id="@+id/uptime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tele_vers"
+
+        android:layout_toRightOf="@+id/bluetooth_image"
+        android:text="Uptime (sec): "
+        android:textSize="11dp"/>
+
+    <TextView
+        android:id="@+id/battery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/uptime"
+
+        android:layout_toRightOf="@+id/bluetooth_image"
+        android:text="Battery level (mv): "
+        android:textSize="11dp"/>
+
+    <TextView
+        android:id="@+id/tx_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/battery"
+
+        android:layout_toRightOf="@+id/bluetooth_image"
+        android:text="Tx count: "
+        android:textSize="11dp"/>
+
+    <TextView
+        android:id="@+id/eddystone_url"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tx_count"
+
+        android:layout_toRightOf="@+id/bluetooth_image"
+        android:text="Eddystone URL"
+        android:textSize="14dp"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/url"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rssi"
-        android:layout_marginLeft="5dp"
+        android:layout_below="@+id/eddystone_url"
         android:layout_toRightOf="@+id/bluetooth_image"
-        android:text="URL:"
-        android:textSize="11dp" />
+        android:text="URL: "
+        android:textSize="11dp"
+        android:textIsSelectable="false"/>
 
-    <Button
-        android:id="@+id/url_btn"
+    <TextView
+        android:id="@+id/url_link"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:text="Open URL" />
+        android:layout_below="@+id/eddystone_url"
+        android:layout_toRightOf="@+id/url"
+        android:textSize="11dp"/>
 
     <TextView
         android:id="@+id/raw_data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_below="@id/url_btn"
         android:text="RAW DATA"
         android:textColor="@android:color/holo_blue_light"/>
+
 
 </RelativeLayout>

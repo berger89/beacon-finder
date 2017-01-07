@@ -3,8 +3,13 @@ package beaconfinder.fun.berger.de.beaconfinder.util;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Context;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
+import android.content.Intent;
+import android.net.Uri;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.text.style.URLSpan;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,26 +21,50 @@ import android.widget.TextView;
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.utils.UrlBeaconUrlCompressor;
 
-import java.text.DecimalFormat;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
-import beaconfinder.fun.berger.de.beaconfinder.activity.MainActivity;
-import beaconfinder.fun.berger.de.beaconfinder.fragment.MonitorFragment;
 import beaconfinder.fun.berger.de.beaconfinder.R;
+import beaconfinder.fun.berger.de.beaconfinder.fragment.MonitorFragment;
+
+import static beaconfinder.fun.berger.de.beaconfinder.R.id.eddystone_tlm;
+import static beaconfinder.fun.berger.de.beaconfinder.R.id.eddystone_uid;
+import static beaconfinder.fun.berger.de.beaconfinder.R.id.eddystone_url;
+import static beaconfinder.fun.berger.de.beaconfinder.R.id.iBeacon;
 
 /**
  * Created by Berger on 28.04.2016.
  */
-public class BeaconListAdapter extends ArrayAdapter<Beacon> {
+public class BeaconListAdapter extends ArrayAdapter<BeaconUtil> {
 
     private int layoutResource;
     private MonitorFragment monitoringFrag;
 
-    public BeaconListAdapter(Context context, int layoutResource, List<Beacon> threeStringsList) {
-        super(context, layoutResource, threeStringsList);
+    private TextView distanceTV;
+    private TextView rssi_dbmTV;
+    private TextView tx_dbmTV;
+    private TextView distTV;
+    private TextView beaconNameTV;
+    private TextView uuid_numTV;
+    private TextView maj_numTV;
+    private TextView min_numTV;
+    private TextView instanceTV;
+    private TextView namespaceTV;
+
+    private TextView tele_versTV;
+    private TextView uptimeTV;
+    private TextView batteryTV;
+    private TextView tx_countTV;
+    private TextView urlTV;
+
+    private ImageView bluetoothIV;
+    private TextView iBeaconHeader;
+    private TextView eddystoneUidHeader;
+    private TextView eddystoneTlmHeader;
+    private TextView eddystoneUrlHeader;
+    private TextView urlLinkTV;
+
+    public BeaconListAdapter(Context context, int layoutResource, List<BeaconUtil> beaconUtilsList) {
+        super(context, layoutResource, beaconUtilsList);
         this.layoutResource = layoutResource;
         FragmentManager fm = ((Activity) context).getFragmentManager();
         monitoringFrag = (MonitorFragment) fm.findFragmentByTag("MonitorFragment");
@@ -43,122 +72,214 @@ public class BeaconListAdapter extends ArrayAdapter<Beacon> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolderItem viewHolder;
+        BeaconUtil beacon = getItem(position);
 
         if (convertView == null) {
-            LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-            convertView = layoutInflater.inflate(layoutResource, null);
-            // well set up the ViewHolder
-
-            viewHolder = new ViewHolderItem();
-            viewHolder.protocolTV = (TextView) convertView.findViewById(R.id.protocol);
-            viewHolder.typeTV = (TextView) convertView.findViewById(R.id.name);
-            viewHolder.uuid_numTV = (TextView) convertView.findViewById(R.id.uuid);
-            viewHolder.maj_numTV = (TextView) convertView.findViewById(R.id.maj_num);
-            viewHolder.min_numTV = (TextView) convertView.findViewById(R.id.min_num);
-            viewHolder.rssi_dbmTV = (TextView) convertView.findViewById(R.id.rssi);
-            viewHolder.urlTV = (TextView) convertView.findViewById(R.id.url);
-
-            viewHolder.urlBtn = (Button) convertView.findViewById(R.id.url_btn);
-            viewHolder.urlBtn.setVisibility(View.GONE);
-//            viewHolder.distanceTV = (TextView) convertView.findViewById(R.id.distance);
-//            viewHolder.tx_dbmTV = (TextView) convertView.findViewById(R.id.tx_dbm);
-//            viewHolder.distTV = (TextView) convertView.findViewById(R.id.dist_m);
-
-            viewHolder.bluetoothIV = (ImageView) convertView.findViewById(R.id.bluetooth_image);
-            // store the holder with the view.
-
-            convertView.setTag(viewHolder);
-
-        } else {
-            // we've just avoided calling findViewById() on resource everytime
-            // just use the viewHolder
-            viewHolder = (ViewHolderItem) convertView.getTag();
+            convertView = LayoutInflater.from(getContext()).inflate(layoutResource, null);
+            //init Views
+            initViews(convertView);
         }
+        //set all Views visible
+        showViews();
 
+//            distanceTV = (TextView) convertView.findViewById(R.id.distance);
+//            tx_dbmTV = (TextView) convertView.findViewById(R.id.tx_dbm);
+//            distTV = (TextView) convertView.findViewById(R.id.dist_m);
 
-        Beacon beacon = getItem(position);
+        bluetoothIV = (ImageView) convertView.findViewById(R.id.bluetooth_image);
 
         if (beacon != null) {
-            if(beacon.getIdentifiers().size()>1)
-                beacon.getId1();
-            if (viewHolder.distanceTV != null) {
-                if (beacon.getDistance() < 0.51)
-                    viewHolder.distanceTV.append(" "+"immediate");
-                else if (beacon.getDistance() < 3.01)
-                    viewHolder.distanceTV.append(" "+"near");
-                else if (beacon.getDistance() > 3.0)
-                    viewHolder.distanceTV.append(" "+"far");
-                if (monitoringFrag.getUnfindBeaconList().contains(beacon)) {
-//                    viewHolder.bluetoothIV.setImageResource(R.drawable.wifi_icon_grey);
-                    viewHolder.typeTV.setTextColor(Color.GRAY);
-                    if (beacon.getExtraDataFields() != null && beacon.getExtraDataFields().size() > 0) {
-                        Date d1 = new Date();
-                        Date d2 = new Date();
-                        d2.setTime(beacon.getExtraDataFields().get(0));
-                        long seconds = (d1.getTime() - d2.getTime()) / 1000;
-                        viewHolder.distanceTV.append(" "+seconds + "seconds");
-                    }
-                } else
-                    viewHolder.typeTV.setTextColor(Color.BLUE);
+            //Beacon Name
+            beaconNameTV.setText(beacon.getId().split(":")[0]);
 
-//                    viewHolder.bluetoothIV.setImageResource(R.drawable.wifi_icon);
+            //RSSI
+            rssi_dbmTV.append(beacon.getLastAddedBeacon().getRssi() + "");
+            if (beacon.getLastAddedBeacon().getDistance() < 0.5) {
+                // This beacon is immediate (< 0.5 meters)
+                bluetoothIV.setImageResource(R.drawable.wifi_icon_immediate);
+            } else if (beacon.getLastAddedBeacon().getDistance() < 3.0) {
+                // This beacon is near (0.5 to 3 meters)
+                bluetoothIV.setImageResource(R.drawable.wifi_icon_near);
+            } else {
+                // This beacon is far (> 3 meters)
+                bluetoothIV.setImageResource(R.drawable.wifi_icon_far);
             }
 
+            //TODO EDDYSTONE
+            //Eddystone UID
+            if (beacon.getEddystoneUID() != null) {
+                namespaceTV.setText("Namespace: " + beacon.getEddystoneUID().getId1());
+                instanceTV.setText("Instance: " + beacon.getEddystoneUID().getId2());
 
-            if (viewHolder.rssi_dbmTV != null) {
-                viewHolder.rssi_dbmTV.append(" "+beacon.getRssi() + " dBm");
-            }
+                logEddystoneTelemetry(beacon.getEddystoneUID());
 
-            if (viewHolder.tx_dbmTV != null) {
-                viewHolder.tx_dbmTV.append(" "+beacon.getTxPower() + " dBm");
+            } else {
+                eddystoneUidHeader.setVisibility(View.GONE);
+                namespaceTV.setVisibility(View.GONE);
+                instanceTV.setVisibility(View.GONE);
             }
-            if (viewHolder.uuid_numTV != null) {
-                if (beacon.getId1().toString().split("-").length > 4)
-                    viewHolder.uuid_numTV.append(" "+beacon.getId1().toString().split("-")[4] + "");
-                else if (beacon.getServiceUuid() == 0xfeaa && beacon.getBeaconTypeCode() == 0x10) {
-                    // This is a Eddystone-URL frame
-                    String url = UrlBeaconUrlCompressor.uncompress(beacon.getId1().toByteArray());
-                    viewHolder.urlTV.append(" "+url);
-                    viewHolder.urlBtn.setVisibility(View.VISIBLE);
-                }
+            //URL
+            if (beacon.getEddystoneURL() != null) {
+                final String url = UrlBeaconUrlCompressor.uncompress(beacon.getEddystoneURL().getId1().toByteArray());
+                urlLinkTV.append(url);
+                makeTextViewHyperlink(urlLinkTV);
+                if (!url.isEmpty())
+                    urlLinkTV.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                            monitoringFrag.startActivity(intent);
+                        }
+                    });
+            } else {
+                eddystoneUrlHeader.setVisibility(View.GONE);
+                urlTV.setVisibility(View.GONE);
+                urlLinkTV.setVisibility(View.GONE);
             }
-            if (viewHolder.typeTV != null) {
-                viewHolder.typeTV.append(" "+beacon.getBluetoothName());
+            //TLM
+            if (beacon.getEddystoneTLM() != null) {
+                logEddystoneTelemetry(beacon.getEddystoneTLM());
+            } else {
+                eddystoneTlmHeader.setVisibility(View.GONE);
+                tele_versTV.setVisibility(View.GONE);
+                uptimeTV.setVisibility(View.GONE);
+                batteryTV.setVisibility(View.GONE);
+                uptimeTV.setVisibility(View.GONE);
+                tx_countTV.setVisibility(View.GONE);
             }
-            if (viewHolder.distTV != null) {
-                viewHolder.distTV.append(" "+new DecimalFormat("#.###").format(beacon.getDistance()) + "m");
+            //iBeacon
+            if (beacon.getiBeacon() != null)
+                // Just an old fashioned iBeacon or AltBeacon...
+                logGenericBeacon(beacon.getiBeacon());
+            else {
+                iBeaconHeader.setVisibility(View.GONE);
+                uuid_numTV.setVisibility(View.GONE);
+                maj_numTV.setVisibility(View.GONE);
+                min_numTV.setVisibility(View.GONE);
             }
-            if (viewHolder.maj_numTV != null) {
-                if (beacon.getIdentifiers().size() > 1)
-                    viewHolder.maj_numTV.append(" "+beacon.getId2() + "");
-            }
-            if (viewHolder.min_numTV != null) {
-                if (beacon.getIdentifiers().size() > 2)
-                    viewHolder.min_numTV.append(" "+beacon.getId3() + "");
-            }
-
+//            }
         }
         return convertView;
 
     }
 
-    static class ViewHolderItem {
-        TextView distanceTV;
-        TextView rssi_dbmTV;
-        TextView tx_dbmTV;
-        TextView uuid_numTV;
-        TextView typeTV;
-        TextView distTV;
-        TextView maj_numTV;
-        TextView min_numTV;
-        TextView protocolTV;
-        TextView urlTV;
-
-        Button urlBtn;
-        ImageView bluetoothIV;
+    /**
+     * log Eddystome TLM data.
+     *
+     * @param beacon
+     */
+    private void logEddystoneTelemetry(Beacon beacon) {
+        // Do we have telemetry data?
+        if (beacon.getExtraDataFields().size() > 0) {
+            long telemetryVersion = beacon.getExtraDataFields().get(0);
+            long batteryMilliVolts = beacon.getExtraDataFields().get(1);
+            long pduCount = beacon.getExtraDataFields().get(3);
+            long uptime = beacon.getExtraDataFields().get(4);
+            tele_versTV.append("" + telemetryVersion);
+            uptimeTV.append("" + uptime);
+            batteryTV.append("" + batteryMilliVolts);
+            tx_countTV.append("" + pduCount);
+        } else {
+            eddystoneTlmHeader.setVisibility(View.GONE);
+            tele_versTV.setVisibility(View.GONE);
+            uptimeTV.setVisibility(View.GONE);
+            batteryTV.setVisibility(View.GONE);
+            uptimeTV.setVisibility(View.GONE);
+            tx_countTV.setVisibility(View.GONE);
+        }
     }
 
+    /**
+     * log iBeacon and AltBeacon data.
+     *
+     * @param beacon
+     */
+    private void logGenericBeacon(Beacon beacon) {
+        uuid_numTV.append(beacon.getId1() + "");
+
+        if (beacon.getId2() != null) {
+            maj_numTV.append(beacon.getId2() + "");
+        }
+        if (beacon.getId3() != null) {
+            min_numTV.append(beacon.getId3() + "");
+        }
+    }
+
+//    @Override
+//    public void notifyDataSetChanged() {
+//        this.setNotifyOnChange(false);
+//
+//        this.sort(new Comparator<Beacon>() {
+//            @Override
+//            public int compare(Beacon lhs, Beacon rhs) {
+//                return lhs.getBluetoothName().compareTo(rhs.getBluetoothName());
+//            }
+//        });
+//
+//        this.setNotifyOnChange(true);
+//    }
+
+    /**
+     * init Views
+     *
+     * @param convertView
+     */
+    private void initViews(View convertView) {
+        beaconNameTV = (TextView) convertView.findViewById(R.id.name);
+        uuid_numTV = (TextView) convertView.findViewById(R.id.uuid);
+        maj_numTV = (TextView) convertView.findViewById(R.id.maj_num);
+        min_numTV = (TextView) convertView.findViewById(R.id.min_num);
+        rssi_dbmTV = (TextView) convertView.findViewById(R.id.rssi);
+        urlTV = (TextView) convertView.findViewById(R.id.url);
+        urlLinkTV = (TextView) convertView.findViewById(R.id.url_link);
+        tx_countTV = (TextView) convertView.findViewById(R.id.tx_count);
+        uptimeTV = (TextView) convertView.findViewById(R.id.uptime);
+        batteryTV = (TextView) convertView.findViewById(R.id.battery);
+        tele_versTV = (TextView) convertView.findViewById(R.id.tele_vers);
+        namespaceTV = (TextView) convertView.findViewById(R.id.namespace);
+        instanceTV = (TextView) convertView.findViewById(R.id.instance);
+
+        //Headers
+        iBeaconHeader = (TextView) convertView.findViewById(R.id.iBeacon);
+        eddystoneUidHeader = (TextView) convertView.findViewById(R.id.eddystone_uid);
+        eddystoneTlmHeader = (TextView) convertView.findViewById(R.id.eddystone_tlm);
+        eddystoneUrlHeader = (TextView) convertView.findViewById(R.id.eddystone_url);
+
+    }
+
+    /**
+     * visible all Views
+     */
+    private void showViews() {
+        beaconNameTV.setVisibility(View.VISIBLE);
+        uuid_numTV.setVisibility(View.VISIBLE);
+        maj_numTV.setVisibility(View.VISIBLE);
+        min_numTV.setVisibility(View.VISIBLE);
+        rssi_dbmTV.setVisibility(View.VISIBLE);
+        urlTV.setVisibility(View.VISIBLE);
+        urlLinkTV.setVisibility(View.VISIBLE);
+        tx_countTV.setVisibility(View.VISIBLE);
+        uptimeTV.setVisibility(View.VISIBLE);
+        batteryTV.setVisibility(View.VISIBLE);
+        tele_versTV.setVisibility(View.VISIBLE);
+        namespaceTV.setVisibility(View.VISIBLE);
+        instanceTV.setVisibility(View.VISIBLE);
+        //Headers
+        iBeaconHeader.setVisibility(View.VISIBLE);
+        eddystoneUidHeader.setVisibility(View.VISIBLE);
+        eddystoneTlmHeader.setVisibility(View.VISIBLE);
+        eddystoneUrlHeader.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * Sets a hyperlink style to the textview.
+     */
+    public static void makeTextViewHyperlink(TextView tv) {
+        SpannableStringBuilder ssb = new SpannableStringBuilder();
+        ssb.append(tv.getText());
+        ssb.setSpan(new URLSpan("#"), 0, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tv.setText(ssb, TextView.BufferType.SPANNABLE);
+    }
 
 }
 

@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -33,6 +34,7 @@ import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.Identifier;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
+import org.altbeacon.beacon.utils.UrlBeaconUrlCompressor;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -44,6 +46,10 @@ import java.util.List;
 
 import beaconfinder.fun.berger.de.beaconfinder.R;
 import beaconfinder.fun.berger.de.beaconfinder.util.BeaconListAdapter;
+import beaconfinder.fun.berger.de.beaconfinder.util.BeaconUtil;
+
+import static android.R.attr.topOffset;
+import static beaconfinder.fun.berger.de.beaconfinder.R.mipmap.beacon;
 
 public class MonitorFragment extends Fragment implements BeaconConsumer, RangeNotifier {
 
@@ -57,11 +63,11 @@ public class MonitorFragment extends Fragment implements BeaconConsumer, RangeNo
 
     private BeaconManager beaconManager;
 
-    private HashMap<String, Beacon> beaconHashMap;
+    private HashMap<String, BeaconUtil> beaconHashMap;
 
     private List<Beacon> unfindBeaconList = new ArrayList();
 
-    private OnFragmentInteractionListener mListener;
+    int positionList;
 
     private BeaconListAdapter adapter;
 
@@ -89,12 +95,12 @@ public class MonitorFragment extends Fragment implements BeaconConsumer, RangeNo
         // Detect the URL frame:
         beaconManager.getBeaconParsers().add(new BeaconParser().
                 setBeaconLayout(BeaconParser.EDDYSTONE_URL_LAYOUT));
-        // Detect Eddystone-EID
+        // Detect parser for iBeacons;
         beaconManager.getBeaconParsers().add(new BeaconParser().
                 setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"));
 
 //        beaconManager.debug = true;
-        beaconHashMap = new HashMap<String, Beacon>();
+        beaconHashMap = new HashMap<String, BeaconUtil>();
         if (!Assent.isPermissionGranted(Assent.ACCESS_COARSE_LOCATION)) {
             requestLocationPermission();
         }
@@ -187,7 +193,7 @@ public class MonitorFragment extends Fragment implements BeaconConsumer, RangeNo
                 @Override
                 public void onDismiss(DialogInterface dialog) {
 //                    finish();
-//                    System.exit(0);
+                    System.exit(0);
                 }
 
             });
@@ -259,8 +265,22 @@ public class MonitorFragment extends Fragment implements BeaconConsumer, RangeNo
 //                beacon.setExtraDataFields(l);
 //                beaconHashMap.put(beacon.getBluetoothAddress(), beacon);
 //            }
-            for (Beacon beacon : beacons)
-                beaconHashMap.put(beacon.getId1().toHexString(), beacon);
+            //Put Beacon to BeaconUtil
+
+
+            for (Beacon beacon : beacons) {
+                BeaconUtil beaconUtil;
+                if (!beaconHashMap.containsKey(beacon.getBluetoothName() + ":" + beacon.getBluetoothAddress())) {
+                    beaconUtil = new BeaconUtil();
+                    beaconUtil.setId(beacon.getBluetoothName() + ":" + beacon.getBluetoothAddress());
+                    beaconUtil.addBeacon(beacon);
+                    beaconHashMap.put(beacon.getBluetoothName() + ":" + beacon.getBluetoothAddress(), beaconUtil);
+                } else {
+                    beaconUtil = beaconHashMap.get(beacon.getBluetoothName() + ":" + beacon.getBluetoothAddress());
+                    beaconUtil.addBeacon(beacon);
+                    beaconHashMap.put(beacon.getBluetoothName() + ":" + beacon.getBluetoothAddress(), beaconUtil);
+                }
+            }
 
             if (getActivity() == null)
                 return;
@@ -268,35 +288,28 @@ public class MonitorFragment extends Fragment implements BeaconConsumer, RangeNo
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Parcelable state = listView.onSaveInstanceState();
+                    int lastViewedPosition = listView.getFirstVisiblePosition();
 
-//                            BeaconListAdapter adapter = new BeaconListAdapter(listView.getContext(), R.layout.list_item_beacon, new ArrayList(beaconHashMap.values()));
-//                            listView.setAdapter(adapter);
-                    adapter = new BeaconListAdapter(listView.getContext(), R.layout.list_item_beacon2, new ArrayList(beaconHashMap.values()));
-                    adapter.clear();
+                    //get offset of first visible view
+                    View v = listView.getChildAt(0);
+                    int topOffset = (v == null) ? 0 : v.getTop();
+
                     List arrayList = new ArrayList(beaconHashMap.values());
                     //Sort
-                    Collections.sort(arrayList, new Comparator<Beacon>() {
+                    Collections.sort(arrayList, new Comparator<BeaconUtil>() {
                         @Override
-                        public int compare(Beacon b1, Beacon b2) {
-                            String mac1 = b1.getBluetoothAddress();
-                            String mac2 = b2.getBluetoothAddress();
+                        public int compare(BeaconUtil b1, BeaconUtil b2) {
+                            String mac1 = b1.getId();
+                            String mac2 = b2.getId();
 
                             return mac1.compareTo(mac2);
                         }
                     });
-                    adapter.addAll(arrayList);
-                    // Save the ListView state (= includes scroll position) as a Parceble e.g. set new items
-                    listView.setAdapter(adapter);
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            Log.d("############", "Items " + beaconHashMap.get(i));
-                        }
-                    });
 
-                    // Restore previous state (including selected item index and scroll position)
-                    listView.onRestoreInstanceState(state);
+                    adapter = new BeaconListAdapter(listView.getContext(), R.layout.list_item_beacon2, arrayList);
+
+                    listView.setAdapter(adapter);
+                    listView.setSelectionFromTop(lastViewedPosition, topOffset);
                 }
             });
 
@@ -358,5 +371,6 @@ public class MonitorFragment extends Fragment implements BeaconConsumer, RangeNo
         pulsingRing.setVisibility(View.VISIBLE);
         pulsingRing.startAnimation(set);
     }
+
 
 }
