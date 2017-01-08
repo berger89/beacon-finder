@@ -82,4 +82,18 @@ public class BeaconUtil {
     public void setLastAddedBeacon(Beacon lastAddedBeacon) {
         this.lastAddedBeacon = lastAddedBeacon;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (eddystoneUID != null)
+            stringBuilder.append("Eddystone UID :\n" + eddystoneUID + "\n");
+        if (eddystoneTLM != null)
+            stringBuilder.append("Eddystone TLM :\n" + eddystoneTLM + "\n");
+        if (eddystoneURL != null)
+            stringBuilder.append("Eddystone URL :\n" + eddystoneURL + "\n");
+        if (iBeacon != null)
+            stringBuilder.append("iBeacon :\n" + iBeacon);
+        return stringBuilder.toString();
+    }
 }

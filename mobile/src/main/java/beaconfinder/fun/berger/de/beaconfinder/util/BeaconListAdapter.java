@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.utils.UrlBeaconUrlCompressor;
@@ -62,6 +63,7 @@ public class BeaconListAdapter extends ArrayAdapter<BeaconUtil> {
     private TextView eddystoneTlmHeader;
     private TextView eddystoneUrlHeader;
     private TextView urlLinkTV;
+    private TextView raw_dataTV;
 
     public BeaconListAdapter(Context context, int layoutResource, List<BeaconUtil> beaconUtilsList) {
         super(context, layoutResource, beaconUtilsList);
@@ -72,7 +74,7 @@ public class BeaconListAdapter extends ArrayAdapter<BeaconUtil> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        BeaconUtil beacon = getItem(position);
+        final BeaconUtil beacon = getItem(position);
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(layoutResource, null);
@@ -82,15 +84,25 @@ public class BeaconListAdapter extends ArrayAdapter<BeaconUtil> {
         //set all Views visible
         showViews();
 
+
 //            distanceTV = (TextView) convertView.findViewById(R.id.distance);
 //            tx_dbmTV = (TextView) convertView.findViewById(R.id.tx_dbm);
 //            distTV = (TextView) convertView.findViewById(R.id.dist_m);
 
         bluetoothIV = (ImageView) convertView.findViewById(R.id.bluetooth_image);
 
+
         if (beacon != null) {
             //Beacon Name
             beaconNameTV.setText(beacon.getId().split(":")[0]);
+
+            //RAW DATA
+            raw_dataTV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(v.getContext(), beacon.toString(), Toast.LENGTH_SHORT).show();
+                }
+            });
 
             //RSSI
             rssi_dbmTV.append(beacon.getLastAddedBeacon().getRssi() + "");
@@ -122,6 +134,7 @@ public class BeaconListAdapter extends ArrayAdapter<BeaconUtil> {
             if (beacon.getEddystoneURL() != null) {
                 final String url = UrlBeaconUrlCompressor.uncompress(beacon.getEddystoneURL().getId1().toByteArray());
                 urlLinkTV.append(url);
+                //TV format
                 makeTextViewHyperlink(urlLinkTV);
                 if (!url.isEmpty())
                     urlLinkTV.setOnClickListener(new View.OnClickListener() {
@@ -238,6 +251,7 @@ public class BeaconListAdapter extends ArrayAdapter<BeaconUtil> {
         tele_versTV = (TextView) convertView.findViewById(R.id.tele_vers);
         namespaceTV = (TextView) convertView.findViewById(R.id.namespace);
         instanceTV = (TextView) convertView.findViewById(R.id.instance);
+        raw_dataTV = (TextView) convertView.findViewById(R.id.raw_data);
 
         //Headers
         iBeaconHeader = (TextView) convertView.findViewById(R.id.iBeacon);

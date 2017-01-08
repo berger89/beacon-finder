@@ -267,19 +267,22 @@ public class MonitorFragment extends Fragment implements BeaconConsumer, RangeNo
 //            }
             //Put Beacon to BeaconUtil
 
-
+            //gescannte Beacons (nur mit Bluetoothname und -adresse) in einer Hasmap speichern bzw. wenn vorhanden dann updaten.
             for (Beacon beacon : beacons) {
                 BeaconUtil beaconUtil;
-                if (!beaconHashMap.containsKey(beacon.getBluetoothName() + ":" + beacon.getBluetoothAddress())) {
-                    beaconUtil = new BeaconUtil();
-                    beaconUtil.setId(beacon.getBluetoothName() + ":" + beacon.getBluetoothAddress());
-                    beaconUtil.addBeacon(beacon);
-                    beaconHashMap.put(beacon.getBluetoothName() + ":" + beacon.getBluetoothAddress(), beaconUtil);
-                } else {
-                    beaconUtil = beaconHashMap.get(beacon.getBluetoothName() + ":" + beacon.getBluetoothAddress());
-                    beaconUtil.addBeacon(beacon);
-                    beaconHashMap.put(beacon.getBluetoothName() + ":" + beacon.getBluetoothAddress(), beaconUtil);
-                }
+                if (!beacon.getBluetoothName().isEmpty() && !beacon.getBluetoothAddress().isEmpty())
+                    if (!beaconHashMap.containsKey(beacon.getBluetoothName() + ":" + beacon.getBluetoothAddress())) {
+                        beaconUtil = new BeaconUtil();
+                        beaconUtil.setId(beacon.getBluetoothName() + ":" + beacon.getBluetoothAddress());
+                        beaconUtil.addBeacon(beacon);
+                        beaconHashMap.put(beacon.getBluetoothName() + ":" + beacon.getBluetoothAddress(), beaconUtil);
+                    } else {
+                        beaconUtil = beaconHashMap.get(beacon.getBluetoothName() + ":" + beacon.getBluetoothAddress());
+                        beaconUtil.addBeacon(beacon);
+                        beaconHashMap.put(beacon.getBluetoothName() + ":" + beacon.getBluetoothAddress(), beaconUtil);
+                    }
+                else
+                    Log.i(TAG,"Bluetoothname is empty or BluetoothAdress is empty: "+beacon.getBluetoothName() + ":" + beacon.getBluetoothAddress());
             }
 
             if (getActivity() == null)

@@ -25,7 +25,9 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import org.altbeacon.beacon.BeaconConsumer;
 
 import beaconfinder.fun.berger.de.beaconfinder.R;
+import beaconfinder.fun.berger.de.beaconfinder.fragment.AboutFragment;
 import beaconfinder.fun.berger.de.beaconfinder.fragment.MonitorFragment;
+import beaconfinder.fun.berger.de.beaconfinder.fragment.TransmitterFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, BeaconConsumer {
@@ -75,7 +77,7 @@ public class MainActivity extends AppCompatActivity
 
         //Das erste Fragment was beim Start der App angezeigt wird
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.content_frame, new MonitorFragment(),"MonitorFragment");
+        transaction.replace(R.id.content_frame, new MonitorFragment(), "MonitorFragment");
         transaction.addToBackStack("MonitorFragment");
         transaction.commit();
 
@@ -135,7 +137,6 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         displayView(item.getItemId());
@@ -155,6 +156,9 @@ public class MainActivity extends AppCompatActivity
         switch (viewId) {
             case R.id.nav_monitor:
                 fragment = new MonitorFragment();
+                break;
+            case R.id.nav_about:
+                fragment = new AboutFragment();
                 break;
 //            case R.id.nav_transmitter:
 //                fragment = new TransmitterFragment();
