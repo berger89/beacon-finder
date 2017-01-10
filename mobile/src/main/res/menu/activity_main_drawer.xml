@@ -7,11 +7,12 @@
             android:icon="@drawable/bluetooth_grey"
             android:title="@string/scanner"/>
 
+        <!--
         <item
         android:id="@+id/nav_logging"
         android:icon="@drawable/log"
         android:title="@string/logger"/>
-
+-->
         <item
             android:id="@+id/nav_about"
             android:icon="@drawable/ic_help_black_24dp"

@@ -20,11 +20,16 @@ android {
     }
     productFlavors {
     }
+
+    dexOptions {
+        incremental true
+        javaMaxHeapSize "4g"
+    }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    wearApp project(':wear')
+//    wearApp project(':wear')
     compile('com.github.afollestad:assent:0.2.2') {
         transitive = true
     }

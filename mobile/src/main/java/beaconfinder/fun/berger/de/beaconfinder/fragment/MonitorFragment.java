@@ -26,6 +26,7 @@ import android.widget.TextView;
 import com.afollestad.assent.Assent;
 import com.afollestad.assent.AssentCallback;
 import com.afollestad.assent.PermissionResultSet;
+import com.google.android.gms.common.api.Api;
 
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
@@ -47,6 +48,7 @@ import java.util.List;
 import beaconfinder.fun.berger.de.beaconfinder.R;
 import beaconfinder.fun.berger.de.beaconfinder.util.BeaconListAdapter;
 import beaconfinder.fun.berger.de.beaconfinder.util.BeaconUtil;
+import beaconfinder.fun.berger.de.beaconfinder.util.Utils;
 
 import static android.R.attr.topOffset;
 import static beaconfinder.fun.berger.de.beaconfinder.R.mipmap.beacon;
@@ -270,7 +272,7 @@ public class MonitorFragment extends Fragment implements BeaconConsumer, RangeNo
             //gescannte Beacons (nur mit Bluetoothname und -adresse) in einer Hasmap speichern bzw. wenn vorhanden dann updaten.
             for (Beacon beacon : beacons) {
                 BeaconUtil beaconUtil;
-                if (!beacon.getBluetoothName().isEmpty() && !beacon.getBluetoothAddress().isEmpty())
+                if (!Utils.isBlankOrNull(beacon.getBluetoothName()) && !Utils.isBlankOrNull(beacon.getBluetoothAddress()))
                     if (!beaconHashMap.containsKey(beacon.getBluetoothName() + ":" + beacon.getBluetoothAddress())) {
                         beaconUtil = new BeaconUtil();
                         beaconUtil.setId(beacon.getBluetoothName() + ":" + beacon.getBluetoothAddress());
@@ -282,7 +284,7 @@ public class MonitorFragment extends Fragment implements BeaconConsumer, RangeNo
                         beaconHashMap.put(beacon.getBluetoothName() + ":" + beacon.getBluetoothAddress(), beaconUtil);
                     }
                 else
-                    Log.i(TAG,"Bluetoothname is empty or BluetoothAdress is empty: "+beacon.getBluetoothName() + ":" + beacon.getBluetoothAddress());
+                    Log.i(TAG, "Bluetoothname is empty or BluetoothAdress is empty: " + beacon.getBluetoothName() + ":" + beacon.getBluetoothAddress());
             }
 
             if (getActivity() == null)
