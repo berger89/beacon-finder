@@ -1,0 +1,68 @@
+
+Ssquid:UnusedPrivateMethod"+Remove this unused private "getPos" method.(İú™¸şÿÿÿÿ
+Xsquid:S3518"CMake sure this expression can't be zero before doing this division.(Ë¶±ü
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(”ŸşÜøÿÿÿÿ
+`squid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(Û Äó
+`squid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(Šë”Ÿ
+`squid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(Õö³ö
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(Àµ®ãüÿÿÿÿ
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(Àµ®ãüÿÿÿÿ
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(àÓ‚˜şÿÿÿÿ
+`squid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(Ãƒ´º
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(ÛóÊ†şÿÿÿÿ
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(ÁèàÌüÿÿÿÿ
+_squid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(Í•”
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(ÇÂŸÿÿÿÿÿ
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(‚Å”†üÿÿÿÿ
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(‹å—Ïûÿÿÿÿ
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(¾ÑÈ”üÿÿÿÿ
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(¬ÜŠèıÿÿÿÿ
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(´÷äÎşÿÿÿÿ
+M
+squid:S106"9Replace this use of System.out or System.err by a logger.(ôØ²Ô
+M
+squid:S106"9Replace this use of System.out or System.err by a logger.(¼¡İÛ
+M
+squid:S106"9Replace this use of System.out or System.err by a logger.(¥øê
+M
+squid:S106"9Replace this use of System.out or System.err by a logger.(±˜êº
+R
+squid:S106"9Replace this use of System.out or System.err by a logger.(ˆŒï˜ùÿÿÿÿ
+R
+squid:S106"9Replace this use of System.out or System.err by a logger.(ş°Ì¶ùÿÿÿÿ
+R
+squid:S106"9Replace this use of System.out or System.err by a logger.(¬–ûÿÿÿÿ
+M
+squid:S106"9Replace this use of System.out or System.err by a logger.(ĞëÏÙ
+R
+squid:S106"9Replace this use of System.out or System.err by a logger.(Å€Ğ¸ÿÿÿÿÿ
+Xsquid:S2583"CChange this condition so that it does not always evaluate to "true"(í¿ŒÙ
+Zsquid:HiddenFieldCheck"5Rename "t" which hides the field declared at line 58.(âè¡¡üÿÿÿÿ
+Ksquid:S1481"6Remove this unused "standardDeviation" local variable.(¦°÷
+Jsquid:S1481"5Remove this unused "covarianceMatrix" local variable.(š‹„
+lsquid:S3776"RRefactor this method to reduce its Cognitive Complexity from 27 to the 15 allowed.(å²²…úÿÿÿÿ
+?squid:S00108")Either remove or fill this block of code.(™÷£Ñ
+Bsquid:S1185"(Remove this method to simply inherit it.(µ‚µõıÿÿÿÿ
+/squid:S2153"Remove the boxing of "py".(÷€¹á
+4squid:S2153"Remove the boxing of "px".(½ò™òøÿÿÿÿ
+4squid:S2153"Remove the boxing of "px".(ˆŒï˜ùÿÿÿÿ
+4squid:S2153"Remove the boxing of "py".(ş°Ì¶ùÿÿÿÿ
+/squid:S2153"Remove the boxing of "px".(æÉ˜ò
+4squid:S2153"Remove the boxing of "py".(ğ„¾¤şÿÿÿÿ
+Ysquid:S1854"DRemove this useless assignment to local variable "covarianceMatrix".(š‹„
+Zsquid:S1854"ERemove this useless assignment to local variable "standardDeviation".(¦°÷
+lsquid:S00117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(éÅåìıÿÿÿÿ
+fsquid:S00117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ı¼¶d
+lsquid:S00117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ì¾éÑûÿÿÿÿ
+Msquid:UselessImportCheck"+Remove this unused import 'java.util.Date'.(¸…¼ü
+Usquid:UselessImportCheck".Remove this unused import 'java.util.HashMap'.(™˜”€ùÿÿÿÿ
+Rsquid:UselessImportCheck"0Remove this unused import 'java.util.ArrayList'.(÷‰îƒ
+vsquid:UselessImportCheck"TRemove this unused import 'beaconfinder.fun.berger.de.beaconfinder.util.LovelyView'.(ªÔëÓ
+Rsquid:UselessImportCheck"+Remove this unused import 'java.util.List'.(Õë±Äøÿÿÿÿ
+5squid:S2129" Remove this "Double" constructor(÷€¹á
+:squid:S2129" Remove this "Double" constructor(½ò™òøÿÿÿÿ
+:squid:S2129" Remove this "Double" constructor(ˆŒï˜ùÿÿÿÿ
+:squid:S2129" Remove this "Double" constructor(ş°Ì¶ùÿÿÿÿ
+5squid:S2129" Remove this "Double" constructor(æÉ˜ò
+:squid:S2129" Remove this "Double" constructor(ğ„¾¤şÿÿÿÿ
+Xsquid:S1155">Use isEmpty() to check whether the collection is empty or not.(¹“‰şÿÿÿÿ

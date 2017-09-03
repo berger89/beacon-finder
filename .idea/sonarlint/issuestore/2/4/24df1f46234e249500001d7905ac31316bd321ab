@@ -1,0 +1,21 @@
+
+Asquid:S1068",Remove this unused "editText" private field.(§†Ä
+msquid:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(óÉ«'
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(Ó·úËøÿÿÿÿ
+`squid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(Ñ¡ÒŞ
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(”ŸşÜøÿÿÿÿ
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(ŞÀëñûÿÿÿÿ
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(‚Å”†üÿÿÿÿ
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(Àµ®ãüÿÿÿÿ
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(Àµ®ãüÿÿÿÿ
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(Ä¨¦øÿÿÿÿ
+`squid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(ìô»¦
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(³Ç“Ùùÿÿÿÿ
+`squid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(ĞŒ¡É
+R
+squid:S106"9Replace this use of System.out or System.err by a logger.(ê–å øÿÿÿÿ
+Gsquid:S1135"2Complete the task associated to this TODO comment.(‡‚ùˆ
+lsquid:S3776"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(é¸¯øıÿÿÿÿ
+Osquid:S2209"5Change this instance-reference to a static reference.(ñîÊïùÿÿÿÿ
+Bsquid:S1185"(Remove this method to simply inherit it.(µ‚µõıÿÿÿÿ
+Xsquid:S1155">Use isEmpty() to check whether the collection is empty or not.(¹“‰şÿÿÿÿ

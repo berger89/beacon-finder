@@ -6,7 +6,6 @@ import android.support.wearable.view.CircledImageView;
 import android.support.wearable.view.WearableListView;
 import android.util.AttributeSet;
 import android.widget.GridLayout;
-import android.widget.LinearLayout;
 
 import beaconfinder.fun.berger.de.beaconfinder.R;
 

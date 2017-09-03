@@ -22,7 +22,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import beaconfinder.fun.berger.de.beaconfinder.MainActivity;
 import beaconfinder.fun.berger.de.beaconfinder.keyboard.DaoInputObject;
 import beaconfinder.fun.berger.de.beaconfinder.rest.BeaconService;
 import retrofit2.Call;

@@ -1,7 +1,5 @@
 package beaconfinder.fun.berger.de.beaconfinder.util.trilateration;
 
-import android.graphics.Point;
-
 /**
  * Created by Berger on 24.05.2016.
  */

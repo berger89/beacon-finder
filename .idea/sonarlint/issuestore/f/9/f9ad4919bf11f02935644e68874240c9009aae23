@@ -1,0 +1,29 @@
+
+Hsquid:S1068".Remove this unused "distanceTV" private field.(À³îËûÿÿÿÿ
+Asquid:S1068",Remove this unused "tx_dbmTV" private field.(¢¯ÅÅ
+?squid:S1068"*Remove this unused "distTV" private field.(º·‘œ
+tsquid:S1450"ZRemove the "bluetoothIV" field and declare it as a local variable in the relevant methods.(ÜÛÂõüÿÿÿÿ
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(¿ïİàùÿÿÿÿ
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(éØ»Úûÿÿÿÿ
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.( ²ı÷ùÿÿÿÿ
+`squid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(§ƒ„°
+`squid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(¤ì€À
+`squid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(·­úï
+Lsquid:S1135"2Complete the task associated to this TODO comment.(û°ò÷ıÿÿÿÿ
+]squid:S1226"HIntroduce a new variable instead of reusing the parameter "convertView".(ŸåÉ½
+lsquid:S3776"RRefactor this method to reduce its Cognitive Complexity from 21 to the 15 allowed.(¨ÿÊÊûÿÿÿÿ
+ksquid:S00116"URename this field "rssi_dbmTV" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(£âË
+isquid:S00116"SRename this field "tx_dbmTV" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¢¯ÅÅ
+psquid:S00116"URename this field "uuid_numTV" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ñé®ûÿÿÿÿ
+jsquid:S00116"TRename this field "maj_numTV" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¯à‚
+osquid:S00116"TRename this field "min_numTV" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(³ÛÙ™ûÿÿÿÿ
+lsquid:S00116"VRename this field "tele_versTV" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ó¬Íä
+psquid:S00116"URename this field "tx_countTV" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(şÆÒºüÿÿÿÿ
+ksquid:S00116"URename this field "raw_dataTV" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‰„ê
+esquid:UselessImportCheck"CRemove this unused import 'android.text.method.LinkMovementMethod'.(Îº×°
+]squid:UselessImportCheck"6Remove this unused import 'android.text.util.Linkify'.(ƒÓŞ¢ıÿÿÿÿ
+Ysquid:UselessImportCheck"2Remove this unused import 'android.widget.Button'.(²òıÿÿÿÿ
+1squid:S2131"Use "Long.toString" instead.(İÅË
+1squid:S2131"Use "Long.toString" instead.(Ğ¹
+0squid:S2131"Use "Long.toString" instead.(ì´ë
+1squid:S2131"Use "Long.toString" instead.(îèï

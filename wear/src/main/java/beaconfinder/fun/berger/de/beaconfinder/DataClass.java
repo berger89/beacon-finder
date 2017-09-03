@@ -4,7 +4,6 @@ import android.app.Activity;
 
 import org.altbeacon.beacon.Beacon;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 public class DataClass {

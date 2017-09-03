@@ -21,8 +21,8 @@ import com.github.brunodles.simplepreferences.lib.DaoPreferences;
 import org.altbeacon.beacon.BeaconManager;
 
 import beaconfinder.fun.berger.de.beaconfinder.R;
-import beaconfinder.fun.berger.de.beaconfinder.keyboard.KeyBoardActivity;
 import beaconfinder.fun.berger.de.beaconfinder.keyboard.DaoInputObject;
+import beaconfinder.fun.berger.de.beaconfinder.keyboard.KeyBoardActivity;
 import beaconfinder.fun.berger.de.beaconfinder.service.BeaconBackgroundService;
 
 public class SettingsActivity extends Activity {

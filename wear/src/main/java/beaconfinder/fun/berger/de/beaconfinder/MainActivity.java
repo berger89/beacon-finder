@@ -17,7 +17,6 @@ import android.widget.Toast;
 import com.afollestad.assent.Assent;
 import com.afollestad.assent.AssentCallback;
 import com.afollestad.assent.PermissionResultSet;
-import com.github.brunodles.simplepreferences.lib.DaoPreferences;
 
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
@@ -32,7 +31,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import beaconfinder.fun.berger.de.beaconfinder.keyboard.DaoInputObject;
 import beaconfinder.fun.berger.de.beaconfinder.list.BeaconListAdapter;
 import beaconfinder.fun.berger.de.beaconfinder.preference.SettingsActivity;
 import beaconfinder.fun.berger.de.beaconfinder.rest.BeaconService;

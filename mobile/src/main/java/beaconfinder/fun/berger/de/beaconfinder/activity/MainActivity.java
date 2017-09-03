@@ -1,12 +1,7 @@
 package beaconfinder.fun.berger.de.beaconfinder.activity;
 
-import android.Manifest;
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -27,7 +22,6 @@ import org.altbeacon.beacon.BeaconConsumer;
 import beaconfinder.fun.berger.de.beaconfinder.R;
 import beaconfinder.fun.berger.de.beaconfinder.fragment.AboutFragment;
 import beaconfinder.fun.berger.de.beaconfinder.fragment.MonitorFragment;
-import beaconfinder.fun.berger.de.beaconfinder.fragment.TransmitterFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, BeaconConsumer {
@@ -160,15 +154,6 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_about:
                 fragment = new AboutFragment();
                 break;
-//            case R.id.nav_transmitter:
-//                fragment = new TransmitterFragment();
-//                break;
-//            case R.id.nav_database:
-//                fragment = new RestFragment();
-//                break;
-//            case R.id.nav_trilateration:
-//                fragment = new TrilaterationFragment();
-//                break;
         }
 
         if (fragment != null) {

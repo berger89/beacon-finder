@@ -1,0 +1,8 @@
+
+`squid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(ÜäÚ»
+`squid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(∑ª«∫
+Usquid:UselessImportCheck".Remove this unused import 'android.view.View'.(ÿΩ≠‰˛ˇˇˇˇ
+Zsquid:UselessImportCheck"8Remove this unused import 'android.view.LayoutInflater'.(¿Ø—«
+Usquid:UselessImportCheck"3Remove this unused import 'android.view.ViewGroup'.(ãèÓ·
+gsquid:UselessImportCheck"@Remove this unused import 'android.support.annotation.Nullable'.(÷ã¯Ô¸ˇˇˇˇ
+>squid:S1940")Use the opposite operator (">=") instead.(±Ì–∂

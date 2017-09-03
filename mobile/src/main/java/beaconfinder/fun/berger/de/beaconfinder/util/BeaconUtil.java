@@ -1,9 +1,6 @@
 package beaconfinder.fun.berger.de.beaconfinder.util;
 
 import org.altbeacon.beacon.Beacon;
-import org.altbeacon.beacon.utils.UrlBeaconUrlCompressor;
-
-import static beaconfinder.fun.berger.de.beaconfinder.R.mipmap.beacon;
 
 /**
  * Created by Berger on 07.01.2017.

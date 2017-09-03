@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,8 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -26,16 +23,13 @@ import android.widget.TextView;
 import com.afollestad.assent.Assent;
 import com.afollestad.assent.AssentCallback;
 import com.afollestad.assent.PermissionResultSet;
-import com.google.android.gms.common.api.Api;
 
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
 import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
-import org.altbeacon.beacon.Identifier;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
-import org.altbeacon.beacon.utils.UrlBeaconUrlCompressor;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -50,9 +44,6 @@ import beaconfinder.fun.berger.de.beaconfinder.util.BeaconListAdapter;
 import beaconfinder.fun.berger.de.beaconfinder.util.BeaconUtil;
 import beaconfinder.fun.berger.de.beaconfinder.util.Utils;
 
-import static android.R.attr.topOffset;
-import static beaconfinder.fun.berger.de.beaconfinder.R.mipmap.beacon;
-
 public class MonitorFragment extends Fragment implements BeaconConsumer, RangeNotifier {
 
     protected static final String TAG = "MonitoringFrag";
@@ -61,15 +52,11 @@ public class MonitorFragment extends Fragment implements BeaconConsumer, RangeNo
 
     private ListView listView;
 
-    private TextView editText;
-
     private BeaconManager beaconManager;
 
     private HashMap<String, BeaconUtil> beaconHashMap;
 
     private List<Beacon> unfindBeaconList = new ArrayList();
-
-    int positionList;
 
     private BeaconListAdapter adapter;
 
@@ -219,7 +206,7 @@ public class MonitorFragment extends Fragment implements BeaconConsumer, RangeNo
         try {
             beaconManager.startRangingBeaconsInRegion(region);
         } catch (RemoteException e) {
-            e.printStackTrace();
+            Log.e(TAG, e.getMessage());
         }
         beaconManager.addRangeNotifier(this);
     }

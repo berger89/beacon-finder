@@ -1,0 +1,20 @@
+
+ssquid:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(‡²İ¿ùÿÿÿÿ
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(˜ÇğÍüÿÿÿÿ
+`squid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(±Îª­
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(¢ßÙûûÿÿÿÿ
+`squid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(µ¾ £
+`squid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(†˜ÖÓ
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(”ŸşÜøÿÿÿÿ
+`squid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(Û Äó
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(Àµ®ãüÿÿÿÿ
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(Àµ®ãüÿÿÿÿ
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(ÃûË“şÿÿÿÿ
+R
+squid:S106"9Replace this use of System.out or System.err by a logger.(ê–å øÿÿÿÿ
+Wsquid:S2583"DChange this condition so that it does not always evaluate to "false"(£Úw
+lsquid:S3776"RRefactor this method to reduce its Cognitive Complexity from 21 to the 15 allowed.(å²²…úÿÿÿÿ
+?squid:S00108")Either remove or fill this block of code.(™÷£Ñ
+=squid:S1185"(Remove this method to simply inherit it.(ÍÙ÷¢
+Csquid:S1940")Use the opposite operator ("<=") instead.(¬Ö˜Œÿÿÿÿÿ
+Xsquid:S1155">Use isEmpty() to check whether the collection is empty or not.(¹“‰şÿÿÿÿ
